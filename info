@@ -1,0 +1,118 @@
+Paziente: codice fiscale, nome, cognome, data di nascita, genere, telefono, email, patologia da trattare 
+
+Medico: codice fiscale, nome, cognome, data di nascita, genere, telefono, email, professione 
+
+Messaggi: paziente, medico, data, contenuto 
+
+Seduta: codSeduta, paziente, medico, data, video, evaluate_rt, evalute_pt 
+
+Esercizi: codEsercizi, categoria, video, descrizione 
+
+
+
+Elenco sedute
+Seduta
+
+Elenco esercizi
+Esercizio
+
+Elenco Medici
+Medico
+
+Elenco Clienti
+Cliente
+
+
+
+1. Paziente
+VE (Elenco Pazienti)
+
+    Visualizza elenco di tutti i pazienti (con filtri o paginazione opzionale)
+
+    Seleziona paziente per passare alla vista dettaglio (VD)
+
+    Ricerca paziente per nome, codice fiscale o patologia
+
+    (Opzionale) Crea nuovo paziente
+
+VD (Dettaglio Paziente)
+
+    Visualizza dati anagrafici (nome, CF, data nascita, ecc.)
+
+    Modifica dati paziente
+
+    Visualizza storico sedute (collegate al paziente)
+
+    Visualizza / invia messaggi al medico (funzione messaggi integrata)
+
+    (Opzionale) Elimina paziente
+
+2. Medico
+VE (Elenco Medici)
+
+    Visualizza elenco medici
+
+    Seleziona medico per passare al dettaglio
+
+    Ricerca medico per nome, CF, professione
+
+    (Opzionale) Crea nuovo medico
+
+VD (Dettaglio Medico)
+
+    Visualizza dati anagrafici
+
+    Modifica dati medico
+
+    Visualizza storico sedute del medico
+
+    Visualizza / invia messaggi al paziente (funzione messaggi integrata)
+
+    (Opzionale) Elimina medico
+
+3. Seduta
+VE (Elenco Sedute)
+
+    Visualizza elenco sedute (data, paziente, medico)
+
+    Seleziona seduta per dettaglio
+
+    Filtra per data, medico o paziente
+
+    (Opzionale) Crea nuova seduta
+
+VD (Dettaglio Seduta)
+
+    Visualizza dettagli seduta: data, video, valutazioni
+
+    Modifica dati seduta
+
+    Visualizza dati collegati: info paziente, medico
+
+    (Opzionale) Elimina seduta
+
+4. Esercizio
+VE (Elenco Esercizi)
+
+    Visualizza elenco esercizi (categoria, descrizione)
+
+    Seleziona esercizio per dettaglio
+
+    (Opzionale) Crea nuovo esercizio
+
+    Filtra per categoria
+
+VD (Dettaglio Esercizio)
+
+    Visualizza video e descrizione esercizio
+
+    Modifica esercizio
+
+    (Opzionale) Elimina esercizio
+
+
+
+
+
+
+
