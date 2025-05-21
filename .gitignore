@@ -1,0 +1,17 @@
+# Ignora tutti i file temporanei
+*.tmp
+
+# Ignora la cartella node_modules
+node_modules/
+
+# Ignora file di configurazione locali
+.env
+settings_local.py
+
+# Ignora tutto nella cartella log
+log/
+
+# Ignora tutti i file .log
+*.log
+
+info
