@@ -18,3 +18,7 @@
   color: #fff !important;                 /* testo bianco */
   border-color: #212529 !important;       /* bordo nero */
 }
+.custom-margin {                /*spaziatura barra navigazione*/
+  margin-left: 8rem;
+  margin-right: 8rem;
+}
