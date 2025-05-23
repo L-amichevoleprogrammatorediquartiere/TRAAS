@@ -9,23 +9,23 @@ function Navbar() {
                 <div className="collapse navbar-collapse" id="navbarNavDropdown">
                     <ul className="navbar-nav">
                         <li className="nav-item">
-                            <a className="nav-link active" aria-current="page" href="#">Home</a>
+                            <a className="nav-link active" aria-current="page" href="#">Le mie sedute</a>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" href="#">Features</a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link" href="#">Pricing</a>
+                            <a className="nav-link" href="#">Libreria Esercizi</a>
                         </li>
                         <li className="nav-item dropdown">
                             <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Dropdown link
+                            I Tuoi Medici
                             </a>
                             <ul className="dropdown-menu">
-                                <li><a className="dropdown-item" href="#">Action</a></li>
-                                <li><a className="dropdown-item" href="#">Another action</a></li>
-                                <li><a className="dropdown-item" href="#">Something else here</a></li>
+                                <li><a className="dropdown-item" href="#">Leonardo Beccardo</a></li>
+                                <li><a className="dropdown-item" href="#">Antonio Banderas</a></li>
+                                <li><a className="dropdown-item" href="#">Giuseppe Cruciani</a></li>
                             </ul>
+                        </li>
+                        <li className="nav-item">
+                            <a className="nav-link" href="#">Profilo </a>
                         </li>
                     </ul>
                 </div>

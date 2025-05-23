@@ -7,3 +7,14 @@
   margin: 0;
   padding: 0;
 }
+.custom-grey-button {
+  background-color: #e7eaee !important;  /* grigio chiaro iniziale */
+  color: #212529 !important;              /* testo scuro */
+  border-color: #212529 !important;       /* bordo scuro */
+}
+
+.custom-grey-button:hover {
+  background-color: #212529 !important;  /* sfondo nero */
+  color: #fff !important;                 /* testo bianco */
+  border-color: #212529 !important;       /* bordo nero */
+}
