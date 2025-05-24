@@ -1,7 +1,12 @@
+import ContenitoreSedute from "../contenitoreSedute";
+import Navbar from "../navbar";
+
 export default function SedutePage() {
     return (
       <>
-        <h2>Sedute</h2>
+        <Navbar/>
+        <ContenitoreSedute/>
+        <ContenitoreSedute/>
       </>
     );
   }
