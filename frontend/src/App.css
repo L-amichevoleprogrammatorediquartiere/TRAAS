@@ -1,3 +1,8 @@
+:root {
+  --bg-div-color: #D9D9D9;
+  --bg-traslucid: #d9d9d9a9;
+}
+
 .app-background {
   background-image: url('./assets/sfondo.jpg');
   background-size: cover;
