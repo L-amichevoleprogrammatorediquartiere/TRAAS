@@ -13,7 +13,7 @@ export default function MsgSx({ text, time }){
                 margin: '6px 0',
                 position: 'relative',
                 wordBreak: 'break-word',
-                textAlign: 'right',
+                textAlign: 'left',
             }}
         >
             <p style={{ margin: 0, fontSize: '0.95rem' }}>{text}</p>

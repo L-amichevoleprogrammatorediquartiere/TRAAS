@@ -8,7 +8,7 @@ export default function ChatSmall({ onClick }) {
 
     useEffect(() => {
         const loadMessages = async () => {
-            const rendered = await renderMessages(5); // ad esempio 5 messaggi per chat small e 20 per big
+            const rendered = await renderMessages(5); // renderizza solo i primi 5 messaggi in chatsmall
             setRenderedMessages(rendered);
         };
 
@@ -40,7 +40,7 @@ export default function ChatSmall({ onClick }) {
                     height: '100%',
                     overflow: 'hidden',
                     display: 'flex',              // flex container
-                    flexDirection: 'column-reverse', // 👈 messaggi dal basso verso l’alto
+                    flexDirection: 'column-reverse', // messaggi dal basso verso l’alto
                     justifyContent: 'flex-start', // parte dal fondo, poi sale
                     padding: '10px',
                     boxSizing: 'border-box',
