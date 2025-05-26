@@ -2,21 +2,50 @@ export default function Scritta(){
     return(
         <div
         style={{
-            postion: 'absolute',
-            top: '15%',
-            left: '14%',
-            width: '70%',
-            height: '60%',
-            display: 'flex',
             flexDirection: 'column',
             fontFamily: 'var(--carattere-txt)',
             fontSize: '20px'
         }}>
-            <p><span style={{fontSize: '90px'}}><b>T</b></span> tele </p>
-            <p><span style={{fontSize: '90px'}}><b>R</b></span> rehabilitation </p>
-            <p><span style={{fontSize: '90px'}}><b>A</b></span> s </p>
-            <p><span style={{fontSize: '90px'}}><b>A</b></span>  </p>
-            <p><span style={{fontSize: '90px'}}><b>S</b></span> service </p>
+            <div
+            style={{
+                position: 'absolute',
+                top: '10%',
+                left: '75%'
+            }}>
+                <p><span style={{fontSize: '90px'}}><b><i>T</i></b></span> tele </p>
+            </div>
+            <div
+            style={{
+                position: 'absolute',
+                top: '25%',
+                left: '75%'
+            }}>
+                <p><span style={{fontSize: '90px'}}><b><i>R</i></b></span> rehabilitation </p>
+            </div>
+            <div
+            style={{
+                position: 'absolute',
+                top: '40%',
+                left: '75%'
+            }}>
+                <p><span style={{fontSize: '90px'}}><b><i>A</i></b></span> s </p>
+            </div>
+            <div
+            style={{
+                position: 'absolute',
+                top: '55%',
+                left: '75%'
+            }}>
+                <p><span style={{fontSize: '90px'}}><b><i>A</i></b></span>  </p>
+            </div>
+            <div
+            style={{
+                position: 'absolute',
+                top: '70%',
+                left: '75%'
+            }}>
+                <p><span style={{fontSize: '90px'}}><b><i>S</i></b></span> service </p>
+            </div>
         </div>
     );
 }
