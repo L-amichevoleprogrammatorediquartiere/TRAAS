@@ -15,8 +15,8 @@ export default function PopUpBig({ onClick, onInnerClick }) {
           className="position-absolute rounded"
           style={{
             top: '10%',
-            left: '10%',
-            width: '80%',
+            left: '14%',
+            width: '70%',
             height: '80%',
             display: 'flex',
             justifyContent: 'center',
@@ -30,7 +30,7 @@ export default function PopUpBig({ onClick, onInnerClick }) {
             <div
                 style = {{
                     position: 'absolute',
-                    top: '88%',
+                    top: '89%',
                     left: '94%',
                 }}>
                 <CollapseButton

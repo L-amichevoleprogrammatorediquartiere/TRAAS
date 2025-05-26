@@ -1,9 +1,9 @@
-import PopUpBig from "../popup/ppbig";
+import Scritta from '../scritta'
 
 export default function HomePage() {
     return (
       <>
-        <PopUpBig/>
+        <Scritta/>
       </>
     );
   }
