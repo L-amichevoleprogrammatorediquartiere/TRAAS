@@ -3,6 +3,10 @@
   --bg-traslucid: #d9d9d9a9;
   --carattere-txt: 'Inter', sans-serif;
   --bg-chat: #787878;
+  --top: '18%';
+  --left: '3.5%';
+  --width: '92%';
+  --height: '75%';
 }
 
 .app-background {
