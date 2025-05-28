@@ -1,7 +1,13 @@
+import Indicees from "../esercizi/indicees";
+import Navbar from "../navbar";
+import GrayTable from "../graytable";
+
 export default function EserciziPage() {
     return (
       <>
-        <h2>Esercizi</h2>
+        <Navbar/>
+        <GrayTable/>
+        <Indicees/>
       </>
     );
   }

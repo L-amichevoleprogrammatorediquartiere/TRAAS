@@ -69,7 +69,7 @@ export default function ChatBig({profile='NomeProfilo',profilePic}) {
                     backgroundColor: 'var(--bg-chat)', 
                     border: '1px solid #212529', // bordo scuro, per coerenza
                     padding: '20px',
-            }}>
+                }}>
                 <div
                     ref={containerRef}
                     className="position-absolute rounded-0"
