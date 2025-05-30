@@ -8,6 +8,7 @@ export default function EserciziPage() {
         <Navbar/>
         <GrayTable/>
         <Indicees/>
+        <ContenitoreEsercizi/>
       </>
     );
   }
