@@ -10,6 +10,7 @@ import './App.css';
 
 
 function App() {
+  
   const [view, setView] = useState('home');
 
   const renderView = () => {
