@@ -3,10 +3,10 @@ import GrayTable from "../graytable";
 import Navbar from "../navbar";
 import SeduteWrapper from "../seduteWrapper";
 
-export default function SedutePage() {
+export default function SedutePage({setView, view}) {
   return (
     <>
-      <Navbar />
+      <Navbar setView={setView} view={view}/>
       <SeduteWrapper/>
       
       {/* <GrayTable /> se vuoi, puoi aggiungere anche questo */}
