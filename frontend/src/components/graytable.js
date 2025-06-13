@@ -3,7 +3,7 @@ export default function GrayTable() {
         <div
         style={{
             position: 'absolute',
-            top: '18%',
+            top: '15%',     //modifica da 18 a 15
             left: '3.5%',
             width: '92%',
             height: '75%',
