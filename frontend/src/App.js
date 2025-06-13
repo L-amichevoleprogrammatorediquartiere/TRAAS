@@ -10,7 +10,7 @@ import './App.css';
 
 
 function App() {
-  const [view, setView] = useState('esercizi');
+  const [view, setView] = useState('sedute');
 
   const renderView = () => {
     switch (view) {
