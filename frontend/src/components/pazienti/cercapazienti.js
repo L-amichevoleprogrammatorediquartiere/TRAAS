@@ -3,7 +3,7 @@ import SearchButton from "../button/searchbutton";
 import OpenButton from "../button/openbutton";
 import { CercaPazienti } from "../../backend";
 
-function MiniPaziente({ codiceFiscale, patologia }) {
+function MiniPaziente({ codiceFiscale, patologia, setPopOn, setCodiceFiscaleSelezionato }) {
   return (
     <div
       style={{
@@ -24,12 +24,12 @@ function MiniPaziente({ codiceFiscale, patologia }) {
       </div>
 
       {/* Bottone a destra */}
-      <OpenButton />
+      <OpenButton onClick={()=>{setPopOn(true);setCodiceFiscaleSelezionato(codiceFiscale)}}/>
     </div>
   );
 }
 
-export default function CercaPaziente() {
+export default function CercaPaziente({setPopOn, setCodiceFiscaleSelezionato}) {
   const [query, setQuery] = useState('');
   const [risultati, setRisultati] = useState([]);
 
@@ -66,6 +66,7 @@ export default function CercaPaziente() {
             key={index}
             codiceFiscale={paziente.codiceFiscale}
             patologia={paziente.patologia}
+            setPopOn={setPopOn} setCodiceFiscaleSelezionato={setCodiceFiscaleSelezionato}
           />
         ))}
       </div>

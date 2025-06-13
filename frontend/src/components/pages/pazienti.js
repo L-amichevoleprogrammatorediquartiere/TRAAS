@@ -4,6 +4,9 @@ import Navbar from "../navbar";
 import CercaPazienti from "../pazienti/cercapazienti";
 import Paziente from "../pazienti/paziente";
 import fetchPazientiConMessaggi from "../../backend";
+import PopUpBig from "../popup/ppbig";
+import ChatSmall from "../chat/chatsmall";
+import InfoUser from "../popup/infouser";
 
 export default function PazientiPage({setView, view}) {
   const [pazientiConMessaggi, setPazientiConMessaggi] = useState([]);
@@ -13,11 +16,14 @@ export default function PazientiPage({setView, view}) {
     setPazientiConMessaggi(pazienti);
   }, []);
 
+  const [popOn, setPopOn] = useState(false);
+  const [codiceFiscaleSelezionato, setCodiceFiscaleSelezionato] = useState(null);
+
   return (
     <>
       <Navbar setView={setView} view={view} />
       <GrayTable />
-      <CercaPazienti />
+      <CercaPazienti setPopOn={setPopOn} setCodiceFiscaleSelezionato={setCodiceFiscaleSelezionato}/>
 
       {/* Contenitore scrollabile dei pazienti con messaggi */}
       <div
@@ -36,9 +42,17 @@ export default function PazientiPage({setView, view}) {
             key={index}
             codiceFiscale={paziente.codiceFiscale}
             patologia={paziente.patologia}
+            setPopOn={setPopOn} setCodiceFiscaleSelezionato={setCodiceFiscaleSelezionato}
           />
         ))}
       </div>
+      {popOn && (
+        <>
+          <PopUpBig onClick={()=> setPopOn(false)} onInnerClick={()=> setPopOn(false)}/>
+          <InfoUser codiceFiscale={codiceFiscaleSelezionato} />
+          <ChatSmall codiceFiscale={codiceFiscaleSelezionato}/>
+        </>
+      )}
     </>
   );
 }

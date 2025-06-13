@@ -17,8 +17,6 @@ export default function HomePage({setView, view}) {
 
   return (
     <>
-      <Navbar setView={setView} view={view} />
-
       {userRole === 'medico' && (
         <>
           <GrayTable />
@@ -42,6 +40,7 @@ export default function HomePage({setView, view}) {
       )}
 
       <Phrases />
+      <Navbar setView={setView} view={view} />
     </>
   );
 }

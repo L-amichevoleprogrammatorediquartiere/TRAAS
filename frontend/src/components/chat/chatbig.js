@@ -2,30 +2,36 @@ import { useState, useRef, useEffect } from 'react';
 import { renderMessages } from "./rendermessage";
 import SendButton from '../button/sendbutton';
 
-export default function ChatBig({profile='NomeProfilo',profilePic}) {
+export default function ChatBig({profile='NomeProfilo',profilePic,   codiceFiscale, setChatBigger}) {
+    
+    //devi mettere che qua viene solo passato il codice fiscale tutte le info
+    //se le recuperasse lui sennò che dobbiamo passare un bordello
 
     const containerRef = useRef(null);
     const [limit, setLimit] = useState(10);
     const [messages, setMessages] = useState([]);
     const [value, setValue] = useState('');
-
+    
     useEffect(() => {
         const loadMessages = async () => {
-          const container = containerRef.current;
-          if (!container) return;
-      
-          // Salva la distanza dal fondo
-          const scrollFromBottom = container.scrollHeight - container.scrollTop;
-          const rendered = await renderMessages(limit);
-          
-          setMessages(rendered);
-      
-          // Dopo che i messaggi sono aggiornati, ripristina la posizione scroll
-          // Usa un piccolo timeout per assicurarti che il DOM sia aggiornato
-          setTimeout(() => {
+            const container = containerRef.current;
             if (!container) return;
-            container.scrollTop = container.scrollHeight - scrollFromBottom;
-          }, 0);
+      
+            // Salva la distanza dal fondo
+            const scrollFromBottom = container.scrollHeight - container.scrollTop;
+            
+            if(limit-messages.length <= 10){
+                const { rendered } = await renderMessages(limit,codiceFiscale);
+                setMessages(rendered);
+            }
+
+            // Dopo che i messaggi sono aggiornati, ripristina la posizione scroll
+            // Usa un piccolo timeout per assicurarti che il DOM sia aggiornato
+            
+            setTimeout(() => {
+                if (!container) return;
+                container.scrollTop = container.scrollHeight - scrollFromBottom;
+            }, 0);
         };
         loadMessages();
       }, [limit]);
@@ -33,7 +39,6 @@ export default function ChatBig({profile='NomeProfilo',profilePic}) {
     useEffect(() => {
         const container = containerRef.current;
         const handleScroll = () => {
-            console.log(container.scrollTop*-1, container.scrollHeight - container.clientHeight -10) 
             if (container.scrollTop*-1 >= container.scrollHeight - container.clientHeight -10) {    //10 pixel di tolleranza
                 setLimit(prev => prev + 5); // carica 5 messaggi in più
             }
