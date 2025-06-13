@@ -9,7 +9,7 @@ import PlusButton from '../button/plusbutton';
 import { getInfoUser } from "../../backend";
 
 
-export default function ProfiloPage() {
+export default function ProfiloPage({setView, view}) {
     const [userData, setUserData] = useState(null);
 
     useEffect(() => {
@@ -22,8 +22,7 @@ export default function ProfiloPage() {
 
     return (
       <>
-        <Navbar/>
-        <GrayTable/>
+      <GrayTable/>
         <div style={{ position: 'relative', width: '100%', height: '100vh', fontFamily: 'Arial, sans-serif' }}>
           
           {/* HEADER */}
@@ -107,6 +106,7 @@ export default function ProfiloPage() {
             </div>
           </div>
         </div>
+        <Navbar setView={setView} view={view} />
       </>
     );
 };

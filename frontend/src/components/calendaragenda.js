@@ -3,33 +3,12 @@ import { Calendar, momentLocalizer, Views } from 'react-big-calendar';
 import moment from 'moment';
 import 'moment/locale/it';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import { FetchVisite } from '../backend'; 
 
 // Impostiamo moment in italiano e settimana da lunedì
 moment.locale('it', { week: { dow: 1 } });
 
 const localizer = momentLocalizer(moment);
-
-function mockFetchVisite() {
-  return new Promise(resolve => {
-    setTimeout(() => resolve([
-      {
-        title: 'Visita fisioterapica',
-        start: new Date('2025-06-15T10:00:00'),
-        end: new Date('2025-06-15T11:00:00')
-      },
-      {
-        title: 'Controllo ortopedico',
-        start: new Date('2025-06-18T09:30:00'),
-        end: new Date('2025-06-18T10:30:00')
-      },
-      {
-        title: 'Seduta posturale',
-        start: new Date('2025-06-21T14:00:00'),
-        end: new Date('2025-06-21T15:00:00')
-      }
-    ]), 500);
-  });
-}
 
 export default function CalendarAgenda() {
   const [events, setEvents] = useState([]);
@@ -37,7 +16,7 @@ export default function CalendarAgenda() {
   const [date, setDate] = useState(new Date());
 
   useEffect(() => {
-    mockFetchVisite().then(setEvents);
+    FetchVisite().then(setEvents);
   }, []);
 
   return (

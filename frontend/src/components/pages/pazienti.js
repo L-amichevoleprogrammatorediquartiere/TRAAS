@@ -5,7 +5,7 @@ import CercaPazienti from "../pazienti/cercapazienti";
 import Paziente from "../pazienti/paziente";
 import fetchPazientiConMessaggi from "../../backend";
 
-export default function PazientiPage() {
+export default function PazientiPage({setView, view}) {
   const [pazientiConMessaggi, setPazientiConMessaggi] = useState([]);
 
   useEffect(() => {
@@ -15,7 +15,7 @@ export default function PazientiPage() {
 
   return (
     <>
-      <Navbar />
+      <Navbar setView={setView} view={view} />
       <GrayTable />
       <CercaPazienti />
 

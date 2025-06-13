@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { GetUserRole } from '../backend';
 import { GetMedici } from '../backend';
 
-function Navbar() {
+function Navbar({setView, view}) {
   const [role, setRole] = useState(null);
   const [showDropdown, setShowDropdown] = useState(false);
   const [medici, setMedici] = useState([]);
@@ -22,6 +22,28 @@ function Navbar() {
   function handleClick(label) {
     if (role === 'paziente' && label === 'I tuoi medici') return;
     console.log(`Navigazione verso ${label}`);
+    switch(label){
+      case 'I tuoi pazienti':
+        if (view!== 'pazienti'){
+          setView('pazienti')
+        }
+        break;
+      case 'Profilo':
+        if (view!== 'profilo'){
+          setView('profilo')
+        }
+        break;
+      case 'Libreria esercizi':
+        if (view!== 'esercizi'){
+          setView('esercizi')
+        }
+        break;
+      case 'Le tue sedute':
+        if (view!== 'sedute'){
+          setView('sedute')
+        }
+        break;
+    }
   }
 
   if (!role) return null;

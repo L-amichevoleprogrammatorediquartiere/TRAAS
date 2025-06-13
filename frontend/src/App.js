@@ -10,31 +10,31 @@ import './App.css';
 
 
 function App() {
-  const [view, setView] = useState('profilo');
+  const [view, setView] = useState('home');
 
   const renderView = () => {
     switch (view) {
       
       case 'login':
-        return <LoginPage />;
+        return <LoginPage setView={setView} view={view} />;
       
       case 'registration':
-        return <RegistrationPage />;
+        return <RegistrationPage setView={setView} view={view} />;
       
       case 'home':
-        return <HomePage />;
+        return <HomePage setView={setView} view={view} />;
       
       case 'sedute':
-        return <SedutePage />;
+        return <SedutePage setView={setView} view={view} />;
 
       case 'esercizi':
-        return <EserciziPage />;
+        return <EserciziPage setView={setView} view={view} />;
 
       case 'profilo':
-        return <ProfiloPage />;
+        return <ProfiloPage setView={setView} view={view} />;
 
       case 'pazienti':
-        return <PazientiPage />;
+        return <PazientiPage setView={setView} view={view} />;
 
       default:
         return <div>Pagina non trovata</div>;

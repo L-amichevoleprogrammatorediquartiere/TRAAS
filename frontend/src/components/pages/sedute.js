@@ -1,10 +1,10 @@
 import ContenitoreSedute from "../contenitoreSedute";
 import Navbar from "../navbar";
 
-export default function SedutePage() {
+export default function SedutePage({setView, view}) {
     return (
       <>
-        <Navbar/>
+        <Navbar setView={setView} view={view}/>
         <ContenitoreSedute/>
         <ContenitoreSedute/>
       </>

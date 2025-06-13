@@ -49,7 +49,7 @@ export function CercaPazienti(query) {
 // ritorna ruolo utente che può essere medico o paziente
 export function GetUserRole() {
   return new Promise((resolve) => {
-    setTimeout(() => resolve('paziente'), 500); // cambia in 'medico' per testare entrambi i casi
+    setTimeout(() => resolve('medico'), 100); // cambia in 'medico' per testare entrambi i casi
   });
 }
 
@@ -69,7 +69,7 @@ export function GetMedici() {
         professione: 'Ortopedico',
         immagine: 'https://via.placeholder.com/50'
       }
-    ]), 500);
+    ]), 100);
   });
 }
 
@@ -91,3 +91,27 @@ export const getInfoUser = () => {
     }, 100); // simula 1 secondo di latenza
   });
 };
+
+
+//funzione che recupera le visite fatte e da fare per il medico
+export function FetchVisite() {
+  return new Promise(resolve => {
+    setTimeout(() => resolve([
+      {
+        title: 'Visita fisioterapica',
+        start: new Date('2025-06-15T10:00:00'),
+        end: new Date('2025-06-15T11:00:00')
+      },
+      {
+        title: 'Controllo ortopedico',
+        start: new Date('2025-06-18T09:30:00'),
+        end: new Date('2025-06-18T10:30:00')
+      },
+      {
+        title: 'Seduta posturale',
+        start: new Date('2025-06-21T14:00:00'),
+        end: new Date('2025-06-21T15:00:00')
+      }
+    ]), 100);
+  });
+}
