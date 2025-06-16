@@ -1,258 +1,424 @@
+const API_BASE = 'http://localhost:8000/api';
+
+const ACCESS_TOKEN_KEY = 'accessToken';
+const REFRESH_TOKEN_KEY = 'refreshToken';
+
+
+async function checkAndRefreshToken() {
+  const accessToken = localStorage.getItem(ACCESS_TOKEN_KEY);
+  const refreshToken = localStorage.getItem(REFRESH_TOKEN_KEY);
+
+  if (!accessToken || !refreshToken) {
+    throw new Error('No tokens stored');
+  }
+
+  // Decodifica payload del token access per verificare scadenza
+  const payloadBase64 = accessToken.split('.')[1];
+  const payloadJson = atob(payloadBase64);
+  const payload = JSON.parse(payloadJson);
+  const now = Math.floor(Date.now() / 1000);
+
+  if (payload.exp > now + 60) {  // token ancora valido con 60s margine
+    return accessToken;
+  }
+
+  // Token scaduto, esegui refresh
+  const response = await fetch(`${API_BASE}/token/refresh/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ refresh: refreshToken })
+  });
+
+  if (!response.ok) {
+    throw new Error('Refresh token expired or invalid');
+  }
+
+  const data = await response.json();
+  localStorage.setItem(ACCESS_TOKEN_KEY, data.access); // aggiorna access token
+  return data.access;
+}
+
+
+//per effettuare il login al sito dovrebbe tornare true se ha esito positivo e false se ha esito negativo
+export async function login(codiceFiscale, password) {   //NON TOCCARE CHE FUNZIONA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  var username=codiceFiscale;
+  try {
+    const response = await fetch(`${API_BASE}/token/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username,
+        password,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorMessage = response.status === 401
+        ? 'Credenziali non valide.'
+        : 'Errore durante la connessione al server.';
+      throw new Error(errorMessage);
+    }
+
+    const data = await response.json();
+
+    // Salva i token
+    localStorage.setItem('accessToken', data.access);
+    localStorage.setItem('refreshToken', data.refresh);
+
+    return data; // In caso ti serva fare qualcosa con i token
+
+  } catch (error) {
+    throw error; // Gestirai questo nel componente
+  }
+}
+
 // funzione che recupera dei pazienti con messaggi da leggere
 //cerca nel db se ci sono pazienti con messaggi da leggere utilizzata dentro PazientiPage
 
 // PEPPE bisognerebbe aggiugnere anche alla navbar dalla vista del paziente la notifica vicino
 //ai medici di cui abbiamo messaggi da leggere!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-export default function fetchPazientiConMessaggi() {
-  return [
-    { codiceFiscale: 'RSSMRA80A01H501Z', patologia: 'Ipertensione' },
-    { codiceFiscale: 'VRDLGI75D22F205G', patologia: 'Asma cronica' },
-    { codiceFiscale: 'BNCLNZ90C10F205X', patologia: 'Diabete mellito' },
-    { codiceFiscale: 'BNCLNZ90C10F205X', patologia: 'Diabete mellito' },
-    { codiceFiscale: 'BNCLNZ90C10F205X', patologia: 'Diabete mellito' },
-    { codiceFiscale: 'BNCLNZ90C10F205X', patologia: 'Diabete mellito' },
-    { codiceFiscale: 'BNCLNZ90C10F205X', patologia: 'Diabete mellito' },
-    { codiceFiscale: 'BNCLNZ90C10F205X', patologia: 'Diabete mellito' },
-    { codiceFiscale: 'BNCLNZ90C10F205X', patologia: 'Diabete mellito' },
-    { codiceFiscale: 'BNCLNZ90C10F205X', patologia: 'Diabete mellito' },
-    { codiceFiscale: 'BNCLNZ90C10F205X', patologia: 'Diabete mellito' },
-    { codiceFiscale: 'BNCLNZ90C10F205X', patologia: 'Diabete mellito' },
-    { codiceFiscale: 'BNCLNZ90C10F205X', patologia: 'Diabete mellito' },
-    { codiceFiscale: 'BNCLNZ90C10F205X', patologia: 'Diabete mellito' },
-    { codiceFiscale: 'BNCLNZ90C10F205X', patologia: 'Diabete mellito' },
-  ];
+//fetchPazientiConMessaggi  IT WORKS!!!!
+// codicefiscale del dottore ritorna clienti con messaggi da leggere -> formato codicefiscale, patologia
+export default async function fetchPazientiConMessaggi(codiceFiscale) {   //NON TOCCARE CHE FUNZIONA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  try {
+    const token = await checkAndRefreshToken();
+
+    const response = await fetch(`${API_BASE}/fetchPazientiConMessaggi/`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('Errore nel recupero dei pazienti con messaggi');
+    }
+
+    const data = await response.json();
+    console.log(data);
+    return data;
+  }catch (error) {
+    console.error('Errore in fetchPazientiConMessaggi:', error.message);
+    return null;
+  }
 }
 
 
 // cerca pazienti per una stringa all'interno (cerca dentro nome, cognome, CF, patologia)
 //la utilizziamo dentro il componente CercaPazienti!!!!
-export function CercaPazienti(query) {
-  const data = [
-    { codiceFiscale: 'RSSMRA80A01H501Z', patologia: 'Diabete' },
-    { codiceFiscale: 'BNCLNZ90C10F205X', patologia: 'Ipertensione' },
-    { codiceFiscale: 'VRDLGI75D22F205G', patologia: 'Asma' },
-    { codiceFiscale: 'VRDLGI75D22F205G', patologia: 'Asma' },
-    { codiceFiscale: 'VRDLGI75D22F205G', patologia: 'Asma' },
-    { codiceFiscale: 'VRDLGI75D22F205G', patologia: 'Asma' },
-    { codiceFiscale: 'VRDLGI75D22F205G', patologia: 'Asma' },
-    { codiceFiscale: 'VRDLGI75D22F205G', patologia: 'Asma' },
-    { codiceFiscale: 'VRDLGI75D22F205G', patologia: 'Asma' },
-    { codiceFiscale: 'VRDLGI75D22F205G', patologia: 'Asma' },
-    { codiceFiscale: 'VRDLGI75D22F205G', patologia: 'Asma' },
-    { codiceFiscale: 'VRDLGI75D22F205G', patologia: 'Asma' },
-    { codiceFiscale: 'VRDLGI75D22F205G', patologia: 'Asma' },
-  ];
 
-  return data.filter(
-    p =>
-      p.codiceFiscale.toLowerCase().includes(query.toLowerCase()) ||
-      p.patologia.toLowerCase().includes(query.toLowerCase())
-  );
+//CercaPazienti   IT WORKS!!!!
+// passiamo una stringa e cercheremo dentro: nome, cognome, CF o patologia -> pazienti formato codicefiscale, patologia
+export async function CercaPazienti(query) {   //NON TOCCARE CHE FUNZIONA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  //curl "http://localhost:8000/api/cercaPazienti/?query=spalla"
+  try {
+    const encodedQuery = encodeURIComponent(query);
+    const response = await fetch(`${API_BASE}/cercaPazienti/?query=${encodedQuery}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        // eventuale Authorization se serve, qua non serve....
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Errore nella richiesta');
+    }
+
+    const data = await response.json();
+    return data;
+
+  } catch (error) {
+    console.error("Errore nel fetch cercaPazienti:", error);
+    throw error;
+  }
 }
 
 
-// ritorna ruolo utente che può essere medico o paziente
-export function GetUserRole() {
-  return new Promise((resolve) => {
-    setTimeout(() => resolve('paziente'), 100); // cambia in 'medico' per testare entrambi i casi
-  });
+// ritorna ruolo utente che può essere medico o paziente   IT WORKS!!!!
+//bisogna passargli il token access e può restituire {"role":"paziente"} oppure {"role":"medico"}
+export async function GetUserRole() {   //NON TOCCARE CHE FUNZIONA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  try {
+    const token = await checkAndRefreshToken();
+
+    const response = await fetch(`${API_BASE}/getUserRole/`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('Errore nel recupero del ruolo');
+    }
+
+    const data = await response.json();
+    return data.role; // "medico" o "paziente"
+  } catch (error) {
+    console.error('Errore in GetUserRole:', error.message);
+    return null;
+  }
 }
 
 // ritorna tutti i medici di un paziente
-//la utilizziamo continuamente nella navbar!!!
-export function GetMedici() {
-  return new Promise((resolve) => {
-    setTimeout(() => resolve([
-      {
-        nome: 'Mario',
-        cognome: 'Rossi',
-        professione: 'Fisioterapista',
-        immagine: 'https://via.placeholder.com/50',
-        codiceFiscale: 'CRSGNN03TigerCS'
-      },
-      {
-        nome: 'Luca',
-        cognome: 'Verdi',
-        professione: 'Ortopedico',
-        immagine: 'https://via.placeholder.com/50',
-        codiceFiscale: 'CRSGNN03TigerCs'
+//la utilizziamo continuamente nella navbar!!!    IT WORKS!!!!
+//qui abbiamo un altro problema perchè la funzione getMedici presume che ogni paziente sia associato ad uno o più medici
+//Per risolvere il problema è  stata aggiunta la tabella Associazione, da tenere conto anche nel tasto assegna sedute
+//passiamo il token access e ci deve ritornare i medici nel seguente formato -> Nome, cognome, professione, immagine, codicefiscale
+export async function GetMedici() {   //NON TOCCARE CHE FUNZIONA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  try {
+    const token = await checkAndRefreshToken();
+
+    const response = await fetch(`${API_BASE}/getMedici/`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`
       }
-    ]), 100);
-  });
+    });
+
+    if (!response.ok) {
+      throw new Error('Errore nel recupero dei medici');
+    }
+
+    const data = await response.json();
+    console.log(data);
+    return data; // "medico" o "paziente"
+  } catch (error) {
+    console.error('Errore in GetMedici:', error.message);
+    return null;
+  }
 }
 
-// chiama il backend e ritorna le info dell'utente in uso!!!!!!!!!!
+// chiama il backend e ritorna le info dell'utente in uso!!!!!!!!!!    IT WORKS!!!!
 // ricorda che se è medico dentro patologia devi ritornare ''
-export const getInfoUser = () => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({
-        nome: 'Mario',
-        cognome: 'Rossi',
-        dataNascita: '1980-05-15',
-        genere: 'Maschile',
-        numeroTelefono: '+39 123 456 7890',
-        email: 'mario.rossi@example.com',
-        patologia: 'Ipertensione',
-        immagine: 'https://via.placeholder.com/300', // immagine di esempio
-        codiceFiscale: 'CRSGNN03TigerCs'
-      });
-    }, 100); // simula 1 secondo di latenza
-  });
+//passimao il token access e ci ritorna -> nome, cognome, dataNascita, genere, numero di telefono, email, patologia, immagine, codicefiscale
+export const getInfoUser = async () => {   //NON TOCCARE CHE FUNZIONA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  try {
+    const token = await checkAndRefreshToken();
+
+    const response = await fetch(`${API_BASE}/getInfoUser/`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('Errore nel recupero delle info Utente');
+    }
+
+    const data = await response.json();
+    console.log(data);
+    return data; 
+  } catch (error) {
+    console.error('Errore in GetInfoUser:', error.message);
+    return null;
+  }
 };
 
 
-//funzione che recupera le visite fatte e da fare per il medico
+//funzione che recupera le visite fatte e da fare per il medico    IT WORKS!!!!
 //la utilizziamo dentro il componenete CalendarAgenda!!!!
-export function FetchVisite() {
-  return new Promise(resolve => {
-    setTimeout(() => resolve([
-      {
-        title: 'Visita fisioterapica',
-        start: new Date('2025-06-15T10:00:00'),
-        end: new Date('2025-06-15T11:00:00')
-      },
-      {
-        title: 'Controllo ortopedico',
-        start: new Date('2025-06-18T09:30:00'),
-        end: new Date('2025-06-18T10:30:00')
-      },
-      {
-        title: 'Seduta posturale',
-        start: new Date('2025-06-21T14:00:00'),
-        end: new Date('2025-06-21T15:00:00')
+//dobbiamo passargli il codicefiscale del medico per capire quali fisite deve fare senno come si deve comportare ): (spoiler i was wrong we already have the access token)
+//formato seduta title, start ed end
+export async function FetchVisite(codiceFiscale) {   //NON TOCCARE CHE FUNZIONA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  //\http://localhost:8000/api/fetchVisite/
+  try {
+    const token = await checkAndRefreshToken();
+
+    const response = await fetch(`${API_BASE}/fetchVisite/`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`
       }
-    ]), 100);
-  });
+    });
+
+    if (!response.ok) {
+      throw new Error('Errore nel recupero delle visite medico');
+    }
+
+    const data = await response.json();
+    console.log(data);
+    return data; 
+  } catch (error) {
+    console.error('Errore in fetchVisite:', error.message);
+    return null;
+  }
 }
 
 
-//funzione che carica tutti gli esercizi dal database per metterli nell'elenco puntato
+//funzione che carica tutti gli esercizi dal database per metterli nell'elenco puntato    IT WORKS!!!!
 //la utilizziamo dentro il componente Indiciees!!!
-export function caricaEsercizi() {
-  const datiMock = [
-    { nome: 'Estensione ginocchio da seduto', categoria: 'Arto inferiore' },
-    { nome: 'Sollevamento gamba tesa', categoria: 'Arto inferiore' },
-    { nome: 'Abduzione dell’anca in decubito laterale', categoria: 'Arto inferiore' },
-    { nome: 'Flessione plantare in piedi', categoria: 'Arto inferiore' },
+export async function caricaEsercizi() {   //NON TOCCARE CHE FUNZIONA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  try {
+    const response = await fetch(`${API_BASE}/caricaEsercizi/`, {
+      method: 'GET',
+    });
 
-    { nome: 'Sollevamento del braccio con bastone', categoria: 'Arto inferiore' },
-    { nome: 'Rotazione esterna della spalla', categoria: 'Arto inferiore' },
-    { nome: 'Estensione del gomito con pesetti', categoria: 'Arto inferiore' },
-    { nome: 'Mobilizzazione del polso con palla', categoria: 'Arto inferiore' },
+    if (!response.ok) {
+      throw new Error('Errore nel recupero delle info Utente');
+    }
 
-    { nome: 'Rotazioni del tronco da seduto', categoria: 'Busto' },
-    { nome: 'Flessioni laterali del busto in piedi', categoria: 'Busto' },
-    { nome: 'Estensione lombare a pancia in giù', categoria: 'Busto' },
-
-    { nome: 'Rotazioni del collo', categoria: 'Collo' },
-    { nome: 'Flessioni laterali del collo', categoria: 'Collo' },
-    { nome: 'Chin tucks (ritrazione cervicale)', categoria: 'Collo' },
-
-    { nome: 'Camminata su linea retta', categoria: 'Equilibrio' },
-    { nome: 'Stazione su un piede', categoria: 'Equilibrio' },
-    { nome: 'Passaggi da seduto a in piedi senza mani', categoria: 'Equilibrio' },
-
-    { nome: 'Respirazione diaframmatica', categoria: 'Respirazione' },
-    { nome: 'Espirazione con labbra socchiuse', categoria: 'Respirazione' },
-    { nome: 'Espansione toracica controllata', categoria: 'Respirazione' },
-  ];
-
-  return Promise.resolve(datiMock); // ritorna una Promise con i dati
+    const data = await response.json();
+    console.log(data);
+    return data; 
+  } catch (error) {
+    console.error('Errore in caricaEsercizi:', error.message);
+    return null;
+  }
 }
 
 
-//funzione che cerca gli esercizi nel database per categoria
-//la utilizziamo dentro il componente EserciziPage!!!
-export function getEserciziPerCategoria(categoria = "Arto inferiore") {
-  const tuttiEsercizi = [
-    { nome: 'Estensione ginocchio da seduto', categoria: 'Arto inferiore' },
-    { nome: 'Sollevamento gamba tesa', categoria: 'Arto inferiore' },
-    { nome: 'Rotazione esterna della spalla', categoria: 'Arto inferiore' },
-    { nome: 'Sollevamento gamba tesa', categoria: 'Arto inferiore' },
-    { nome: 'Rotazione esterna della spalla', categoria: 'Arto inferiore' },
-    { nome: 'Sollevamento gamba tesa', categoria: 'Arto inferiore' },
-    { nome: 'Rotazione esterna della spalla', categoria: 'Arto inferiore' },
-    { nome: 'Sollevamento gamba tesa', categoria: 'Arto inferiore' },
-    { nome: 'Rotazione esterna della spalla', categoria: 'Arto inferiore' },
-  ];
+//funzione che cerca gli esercizi nel database per categoria    IT WORKS!!!!
+//la utilizziamo dentro il componente EserciziPage!!! (vai a capirlo)
+//[{"nome":"Estensione ginocchio da seduto","categoria":"Arto inferiore","video":"--","descrizione":"--"},
+export async function getEserciziPerCategoria(categoria = "Arto inferiore") {   //NON TOCCARE CHE FUNZIONA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  try {
+    const encodedCategoria = encodeURIComponent(categoria);
+    const response = await fetch(`${API_BASE}/getEserciziPerCategoria/?categoria=${encodedCategoria}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        // eventuale Authorization se serve, qua non serve....
+      },
+    });
 
-  const filtrati = tuttiEsercizi.filter(e => e.categoria === categoria);
-  return Promise.resolve(filtrati);
+    if (!response.ok) {
+      throw new Error('Errore nella richiesta');
+    }
+
+    const data = await response.json();
+    return data;
+
+  } catch (error) {
+    console.error("Errore nel fetch degli esercizi:", error);
+    throw error;
+  }
 }
 
 
 //questa funzione recupera le info di un singolo paziente cercando attraverso il codice fiscale
 //la utilizziamo dentro il componente InfoUser!!!
-export function RecuperaInfoPaziente(codiceFiscale) {
-  return Promise.resolve({
-    nome: "Mario",
-    cognome: "Rossi",
-    sesso: "M",
-    datadinascita: "01/01/1980",
-    patologia: "Lombalgia cronica",
-    email: "mario.rossi@example.com",
-    telefono: "1234567890",
-    immagine: "https://via.placeholder.com/100",
-    codiceFiscale,
-  });
+export async function RecuperaInfoPaziente(codiceFiscale) {   //NON TOCCARE CHE FUNZIONA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  try {
+    const response = await fetch(`${API_BASE}/recuperaInfoPaziente/?codiceFiscale=${codiceFiscale}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        // eventuale Authorization se serve, qua non serve....
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Errore nella richiesta');
+    }
+
+    const data = await response.json();
+
+    console.log(data)
+
+    return data;
+
+  } catch (error) {
+    console.error("Errore nel recuperInfoPaziente:", error);
+    throw error;
+  }
 }
 
 //questa funzione recupera le info di un singolo medico cercando attraverso il codice fiscale
 //la utilizziamo dentro il componente InfoUser!!!
-export function RecuperaInfoMedico(codiceFiscale) {
-  return Promise.resolve({
-    nome: "Giulia",
-    cognome: "Bianchi",
-    sesso: "F",
-    datadinascita: "15/03/1975",
-    professione: "Fisioterapista",
-    email: "giulia.bianchi@example.com",
-    telefono: "0987654321",
-    immagine: "https://via.placeholder.com/100",
-  });
+export async function RecuperaInfoMedico(codiceFiscale) {   //NON TOCCARE CHE FUNZIONA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  try {
+    const response = await fetch(`${API_BASE}/recuperaInfoMedico/?codiceFiscale=${codiceFiscale}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        // eventuale Authorization se serve, qua non serve....
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Errore nella richiesta');
+    }
+
+    const data = await response.json();
+
+    console.log(data)
+
+    return data;
+
+  } catch (error) {
+    console.error("Errore nel recuperInfoPaziente:", error);
+    throw error;
+  }
 }
 
 
+//formato messaggi: id: (dal messaggio più vecchio al più nuovo quindi in ordine crescente), text:,
+// sender:(può essere o "other" o "me" questo viene in base all'username) ed infine timestamp: "2025-05-25T16:50:00Z"
+export const getMessages = async ( limit, codiceFiscale) => {   //NON TOCCARE CHE FUNZIONA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  //curl -X GET "http://localhost:8000/api/getMessages/?codiceFiscale=DRSSLC70A01H501T" \ 
+  try {
+    const token = await checkAndRefreshToken();
 
-export const getMessages = async ( limit, codiceFiscale) => {
-  
-  const mockAllMessages = [
-    { id: 27, text: 'Ultimo messaggio ricevutotesttesttesttesttesttesttesttesttesttesttesttesttesttesttest', sender: 'other', timestamp: '2025-05-25T18:15:00Z' },
-    { id: 26, text: 'Hai studiato oggi?testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest', sender: 'me', timestamp: '2025-05-25T18:10:00Z' },
-    { id: 25, text: 'Sì, un po\' di React', sender: 'other', timestamp: '2025-05-25T18:05:00Z' },
-    { id: 24, text: 'Bravo! Continua così', sender: 'me', timestamp: '2025-05-25T18:00:00Z' },
-    { id: 23, text: 'Che fai stasera?', sender: 'me', timestamp: '2025-05-25T17:30:00Z' },
-    { id: 22, text: 'Vado al cinema!', sender: 'other', timestamp: '2025-05-25T17:00:00Z' },
-    { id: 21, text: 'Poi mi racconti com è andata?', sender: 'me', timestamp: '2025-05-25T16:55:00Z' },
-    { id: 20, text: 'Certo!', sender: 'other', timestamp: '2025-05-25T16:50:00Z' },
-    { id: 19, text: 'A domani allora!', sender: 'me', timestamp: '2025-05-25T16:45:00Z' },
-    { id: 18, text: 'Notte!', sender: 'other', timestamp: '2025-05-25T16:40:00Z' },
-        //2025-05-24
-    { id: 17, text: 'Oggi è stata una giornata lunga...', sender: 'me', timestamp: '2025-05-24T21:30:00Z' },
-    { id: 16, text: 'Già, sono stanchissimo', sender: 'other', timestamp: '2025-05-24T21:25:00Z' },
-    { id: 15, text: 'Domani relax!', sender: 'me', timestamp: '2025-05-24T21:20:00Z' },
-    { id: 14, text: 'Magari 😅', sender: 'other', timestamp: '2025-05-24T21:15:00Z' },
-    { id: 13, text: 'Buonanotte', sender: 'me', timestamp: '2025-05-24T21:10:00Z' },
+    const response = await fetch(`${API_BASE}/getMessages/?codiceFiscale=${codiceFiscale}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+    });
 
-    { id: 12, text: 'Ci vediamo tra poco', sender: 'other', timestamp: '2025-05-24T16:30:00Z' },
-    { id: 11, text: 'Porta i documenti!', sender: 'me', timestamp: '2025-05-24T16:20:00Z' },
-    { id: 10, text: 'Sì certo', sender: 'other', timestamp: '2025-05-24T16:10:00Z' },
-        //2025-05-23
-    { id: 9, text: 'Hai fatto il backup del database?', sender: 'me', timestamp: '2025-05-23T22:00:00Z' },
-    { id: 8, text: 'Non ancora 😬', sender: 'other', timestamp: '2025-05-23T21:50:00Z' },
-    { id: 7, text: 'Ricordati che è importante!', sender: 'me', timestamp: '2025-05-23T21:45:00Z' },
-    { id: 6, text: 'Va bene, lo faccio adesso', sender: 'other', timestamp: '2025-05-23T21:40:00Z' },
+    if (!response.ok) {
+      throw new Error('Errore nella richiesta');
+    }
 
-    { id: 5, text: 'Ti piace questa nuova UI?', sender: 'me', timestamp: '2025-05-23T14:10:00Z' },
-    { id: 4, text: 'Sì molto! È più pulita', sender: 'other', timestamp: '2025-05-23T14:05:00Z' },
+    const data = await response.json();
 
-    { id: 3, text: 'Perfetto!', sender: 'me', timestamp: '2025-05-23T09:05:00Z' },
-    { id: 2, text: 'Tutto bene, grazie!', sender: 'other', timestamp: '2025-05-23T09:00:00Z' },
-    { id: 1, text: 'Bene, tu?', sender: 'me', timestamp: '2025-05-23T10:02:00Z' },
-        // ricordati che Django i messaggi deve passarli con questa sintassi id: 1, 2 ..... 9, text:, sender: (me o other), timestamp:
-  ];  
+    console.log(data)
 
-  return mockAllMessages.reverse().slice(-limit).reverse();
+    if (!Array.isArray(data)) {
+      throw new Error("Il server non ha restituito un array.");
+    }
+
+    // Ordina per ultimi N messaggi mantenendo l’ordine originale
+    return data.reverse().slice(-limit).reverse();
+
+  } catch (error) {
+    console.error("Errore in getMessages:", error);
+    throw error;
+  }
+
+  //return mockAllMessages.reverse().slice(-limit).reverse();
 };
+
+//curl -X GET "http://localhost:8000/api/esercizi/?nome=Stazione%20su%20un%20piede"
+//[{"nome":"Stazione su un piede","categoria":"Equilibrio","video":"--","descrizione":"--"}
+export async function getEsercizioByName(nome){
+  try {
+    const encodedName = encodeURIComponent(nome);
+    const response = await fetch(`${API_BASE}/esercizi/?nome=${encodedName}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        // eventuale Authorization se serve, qua non serve....
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Errore nella richiesta');
+    }
+
+    const data = await response.json();
+    return data;
+
+  } catch (error) {
+    console.error("Errore nel fetch getEsercizioByName:", error);
+    throw error;
+  }
+}

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { caricaEsercizi } from '../../backend';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
-export default function Indicees({setCategoria}) {
+export default function Indicees({setCategoria, setPopOn, setEsercizioSelezionato}) {
     const [dati, setDati] = useState([]);
     const [categoriaAperta, setCategoriaAperta] = useState(null); // solo una aperta
 
@@ -97,7 +97,7 @@ export default function Indicees({setCategoria}) {
                                                 marginLeft: '10px',
                                                 fontSize: '14px',
                                             }}
-                                            onClick={() => alert(`Hai cliccato: ${nome}`)}
+                                            onClick={() => {setPopOn(true);setEsercizioSelezionato(nome)}}
                                         >
                                             - {nome}
                                         </button>

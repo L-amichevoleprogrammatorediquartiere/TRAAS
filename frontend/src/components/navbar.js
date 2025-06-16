@@ -19,7 +19,7 @@ function Navbar({setView, view}) {
     GetUserRole().then(setRole);
   }, []);
 
-  function handleMediciClick() {
+  async function handleMediciClick() {
     if (!showDropdown) {
       GetMedici().then(setMedici);
     }
@@ -142,10 +142,10 @@ function Navbar({setView, view}) {
                       }}
                       onClick={() => {setPopOn(true);setCodiceFiscaleSelezionato(medico.codiceFiscale)}}
                     >
-                      <img src={medico.immagine} alt={`${medico.nome}`} style={{ width: '25%', height: 'auto' }} />
+                      <img src={medico.immagine} alt={`${medico.nome}`} style={{ width: '25%',  border: "1px solid black" }} />
                       <div style={{ textAlign: 'left', marginLeft: '2%' }}>
                         <div>{medico.nome} {medico.cognome}</div>
-                        <div>{medico.professione}</div>
+                        <div>{medico.specializzazione}</div>
                       </div>
                     </button>
                   ))}

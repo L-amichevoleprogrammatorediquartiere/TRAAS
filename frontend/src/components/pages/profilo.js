@@ -30,8 +30,10 @@ export default function ProfiloPage({setView, view}) {
             Profilo
           </div>
           <div style={{ position: 'absolute', top: '20%', right: '10%', display: 'flex', gap: '15%' }}>
-            <LogOutButton />
-            <CloseButton />
+            <LogOutButton onClick={()=>{localStorage.removeItem('accessToken'); 
+                                        localStorage.removeItem('refreshToken');
+                                        setView('login');}}/>
+            <CloseButton onClick={()=>setView('home')}/>
           </div>
 
           {/* DIV INFORMAZIONI BASE */}
@@ -57,6 +59,7 @@ export default function ProfiloPage({setView, view}) {
 
             <div style={{ position: 'absolute', bottom: '2%', right: '2%' }}>
               <ModifyButton />
+              {/*CI MANCA TUTTA LA PARTE DI MODIFICA !!!!!!!!!!!!!!!!!!!!!!!!SIAMO IN RITARDO MUOVERSI */}
             </div>
           </div>
 

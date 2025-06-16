@@ -3,9 +3,12 @@ import Indicees from "../esercizi/indicees";
 import Navbar from "../navbar";
 import GrayTable from "../graytable";
 import Esercizio from "../esercizi/esercizio";
+import PopUpBig from "../popup/ppbig";
 
 import { getEserciziPerCategoria } from "../../backend"; // importa la funzione
 import PlusButton from "../button/plusbutton";
+
+import InfoEsercizio from "../esercizi/infoesercizio";
 
 export default function EserciziPage({ setView, view }) {
   const [categoria, setCategoria] = useState("Arto inferiore");
@@ -15,11 +18,15 @@ export default function EserciziPage({ setView, view }) {
     getEserciziPerCategoria(categoria).then(setEsercizi);
   }, [categoria]); // si aggiorna ogni volta che cambia categoria
 
+  const [popOn, setPopOn] = useState(false);
+  const [EsercizioSelezionato, setEsercizioSelezionato] = useState(null);
+
   return (
     <>
       <Navbar setView={setView} view={view} />
       <GrayTable />
-      <Indicees setCategoria={setCategoria}/>
+      <Indicees setCategoria={setCategoria}
+      setPopOn={setPopOn} setEsercizioSelezionato={setEsercizioSelezionato}/>
 
       {/* Header categoria + PlusButton */}
       <div style={{
@@ -53,9 +60,18 @@ export default function EserciziPage({ setView, view }) {
         gap: "2%"
       }}>
         {esercizi.map((esercizio, index) => (
-          <Esercizio key={index} nome={esercizio.nome} />
+          <Esercizio key={index} nome={esercizio.nome} 
+          setPopOn={setPopOn} setEsercizioSelezionato={setEsercizioSelezionato}/>
         ))}
       </div>
+
+      {/*Qui apriamo il pop up con le info del esercizio */}
+      {popOn && (
+        <>
+          <PopUpBig onClick={()=> setPopOn(false)} onInnerClick={()=> setPopOn(false)}/>
+          <InfoEsercizio esercizio={EsercizioSelezionato} />
+        </>
+      )}
     </>
   );
 }

@@ -11,7 +11,7 @@ import './App.css';
 
 function App() {
   
-  const [view, setView] = useState('home');
+  const [view, setView] = useState('login');
 
   const renderView = () => {
     switch (view) {

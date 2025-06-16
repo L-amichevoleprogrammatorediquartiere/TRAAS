@@ -12,6 +12,7 @@ export default function HomePage({setView, view}) {
       // Recupera il ruolo al caricamento del componente
       GetUserRole().then((role) => {
       setUserRole(role);
+      console.log(role);
     });
   }, []);
 

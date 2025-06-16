@@ -12,8 +12,17 @@ export default function PazientiPage({setView, view}) {
   const [pazientiConMessaggi, setPazientiConMessaggi] = useState([]);
 
   useEffect(() => {
-    const pazienti = fetchPazientiConMessaggi();
-    setPazientiConMessaggi(pazienti);
+    async function loadPazienti() {
+    try {
+      const pazienti = await fetchPazientiConMessaggi();
+      console.log('Tipo:', pazienti);
+      setPazientiConMessaggi(pazienti);
+    } catch (error) {
+      console.error('Errore nel caricamento dei pazienti:', error);
+    }
+  }
+
+  loadPazienti();
   }, []);
 
   const [popOn, setPopOn] = useState(false);

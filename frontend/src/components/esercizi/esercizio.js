@@ -1,7 +1,7 @@
 import MinusButton from "../button/minusbutton";
 import OpenButton from "../button/openbutton";
 
-export default function Esercizio({ nome }) {
+export default function Esercizio({ nome, setPopOn, setEsercizioSelezionato }) {
   return (
     <div
       style={{
@@ -46,7 +46,7 @@ export default function Esercizio({ nome }) {
           width: '5%',
         }}
       >
-        <OpenButton />
+        <OpenButton onClick={()=>{setPopOn(true);setEsercizioSelezionato(nome)}}/>
       </div>
     </div>
   );

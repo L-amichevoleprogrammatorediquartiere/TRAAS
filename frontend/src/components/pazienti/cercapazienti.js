@@ -33,8 +33,8 @@ export default function CercaPaziente({setPopOn, setCodiceFiscaleSelezionato}) {
   const [query, setQuery] = useState('');
   const [risultati, setRisultati] = useState([]);
 
-  const handleSearch = () => {
-    const risultatiMock = CercaPazienti(query);
+  const handleSearch = async () => {
+    const risultatiMock = await CercaPazienti(query);
     setRisultati(risultatiMock);
   };
 

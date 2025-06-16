@@ -63,7 +63,7 @@ export default function InfoUser({ codiceFiscale }) {
         }}
       >
         {isMedico
-          ? userData.codiceFiscale
+          ? userData.codice_fiscale
           : `Dott. ${userData.nome} ${userData.cognome}`}
       </div>
 
@@ -78,11 +78,11 @@ export default function InfoUser({ codiceFiscale }) {
         }}
       >
         <div>
-          {userData.nome}, {userData.cognome}, {userData.datadinascita},{" "}
-          {userData.sesso}
+          {userData.nome}, {userData.cognome}, {userData.data_di_nascita},{" "}
+          {userData.genere}
           {isMedico
-            ? `, ${userData.patologia}`
-            : `, ${userData.professione}`}
+            ? `, ${userData.patologia_da_trattare}`
+            : `, ${userData.specializzazione}`}
         </div>
         <div>
           {userData.email}
