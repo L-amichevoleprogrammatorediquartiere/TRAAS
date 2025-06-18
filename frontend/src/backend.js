@@ -387,7 +387,7 @@ export const getMessages = async ( limit, codiceFiscale) => {   //NON TOCCARE CH
     }
 
     // Ordina per ultimi N messaggi mantenendo l’ordine originale
-    return data.reverse().slice(-limit).reverse();
+    return data.slice(-limit).reverse();
 
   } catch (error) {
     console.error("Errore in getMessages:", error);
@@ -396,6 +396,7 @@ export const getMessages = async ( limit, codiceFiscale) => {   //NON TOCCARE CH
 
   //return mockAllMessages.reverse().slice(-limit).reverse();
 };
+
 
 //curl -X GET "http://localhost:8000/api/esercizi/?nome=Stazione%20su%20un%20piede"
 //[{"nome":"Stazione su un piede","categoria":"Equilibrio","video":"--","descrizione":"--"}
@@ -419,6 +420,153 @@ export async function getEsercizioByName(nome){
 
   } catch (error) {
     console.error("Errore nel fetch getEsercizioByName:", error);
+    throw error;
+  }
+}
+
+
+/*curl -X POST http://localhost:8000/api/inviaMessaggio/ \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzUwMTUzMzEzLCJpYXQiOjE3NTAxNTMwMTMsImp0aSI6IjA1MmI3Y2ZhOGZhZTRiZWNhNjhjOTU3YjJhN2NiZmZlIiwidXNlcl9pZCI6Mn0.bJNm4fYRtLV6SUt58MP0Z_LQ28cUqcQP_qkW6NM585A" \
+  -H "Content-Type: application/json" \
+  -d '{"codiceFiscale": "FLCGRN89M20H501P", "contenuto": "ciao"}'*/
+export async function inviaMessaggio(codiceFiscale, contenuto){
+    try {
+      const token = await checkAndRefreshToken();
+
+      const response = await fetch(`${API_BASE}/inviaMessaggio/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          codiceFiscale: `${codiceFiscale}`,
+          contenuto: `${contenuto}`
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Errore nella richiesta');
+      }
+      const data = await response.json();
+      console.log(data);
+    }catch (error) {
+      console.error("Errore nel fetch inviaMessaggio:", error);
+      throw error;
+  }
+}
+
+
+/*curl -X POST http://localhost:8000/api/registerUser/ \
+  -H "Content-Type: multipart/form-data" \
+  -F "codice_fiscale=ABCDEF12G34H567I" \
+  -F "nome=Mario" \
+  -F "cognome=Rossi" \
+  -F "data_di_nascita=1990-01-01" \
+  -F "genere=M" \
+  -F "telefono=1234567890" \
+  -F "email=mario.rossi@example.com" \
+  -F "password=G34H567I" \
+  -F "ruolo=paziente" \
+  -F "patologia_da_trattare=Diabete di tipo 2" \
+  -F "immagine=@1000022989.jpg"*/
+export async function registerUser(formData){
+  try {
+    const response = await fetch(`${API_BASE}/registerUser/`, {
+      method: "POST",
+      body: formData, // NON serve specificare Content-Type, lo gestisce il browser
+    });
+
+    if (!response.ok) {
+      throw new Error("Errore nella richiesta");
+    }
+
+    const data = await response.json();
+    console.log("Registrazione avvenuta con successo:", data);
+  } catch (error) {
+    console.error("Errore durante la registrazione:", error);
+  }
+}
+    
+
+export async function updateUser(formData){
+  try{
+    const token = await checkAndRefreshToken();
+
+    const response = await fetch(`${API_BASE}/updateUser/`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData, // NON serve specificare Content-Type, lo gestisce il browser
+    });
+
+    if (!response.ok) {
+      throw new Error("Errore nella richiesta");
+    }
+
+    const data = await response.json();
+    console.log("Registrazione avvenuta con successo:", data);
+
+  } catch(error){
+    console.error("Errore durante la modifica dell'utente:", error);
+  }
+}
+
+
+export async function deleteEsercizio(nome) {
+  try {
+    const token = await checkAndRefreshToken();
+
+    const response = await fetch(`${API_BASE}/deleteEsercizio/`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ nome })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Errore durante l\'eliminazione');
+    }
+
+    const result = await response.json();
+    console.log('Esercizio eliminato con successo:', result);
+    return result;
+
+  } catch (error) {
+    console.error('Errore nella richiesta DELETE:', error);
+    throw error;
+  }
+}
+
+
+export async function createEsercizio(nome,categoria,video,descrizione){
+  try {
+    const token = await checkAndRefreshToken();
+
+    const response = await fetch(`${API_BASE}/createEsercizio/`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ nome,categoria,video,descrizione })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Errore durante la creazione');
+    }
+
+    const result = await response.json();
+    console.log('Esercizio creato con successo:', result);
+    return result;
+
+  } catch (error) {
+    console.error('Errore nella richiesta createEsercizio:', error);
     throw error;
   }
 }

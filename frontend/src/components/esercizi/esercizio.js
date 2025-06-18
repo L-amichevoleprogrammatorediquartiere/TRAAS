@@ -1,7 +1,7 @@
 import MinusButton from "../button/minusbutton";
 import OpenButton from "../button/openbutton";
 
-export default function Esercizio({ nome, setPopOn, setEsercizioSelezionato }) {
+export default function Esercizio({ nome, setPopOn, setEsercizioSelezionato, onMinusClick }) {
   return (
     <div
       style={{
@@ -34,7 +34,7 @@ export default function Esercizio({ nome, setPopOn, setEsercizioSelezionato }) {
           width: '5%',
         }}
       >
-        <MinusButton />
+        <MinusButton onClick={()=>onMinusClick(nome)}/>
       </div>
 
       {/* Bottone Open posizionato con percentuali */}

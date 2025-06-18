@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Scritta from '../scritta';
+import { registerUser } from '../../backend';
 
 export default function RegistrationPage({ setView }) {
   const [selectedRole, setSelectedRole] = useState(null);
@@ -15,6 +16,7 @@ export default function RegistrationPage({ setView }) {
     telefono: '',
     password: '',
     confermaPassword: '',
+    immagine: null,
   });
 
   const [errors, setErrors] = useState({});
@@ -52,10 +54,12 @@ export default function RegistrationPage({ setView }) {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!validate()) return;
-    alert('Registrazione avvenuta con successo!');
     // Qui potresti inviare i dati al backend
+    const fd = createFormData(formData);
+    await registerUser(fd);
+    setView('login');
   };
 
   const errorStyle = {
@@ -63,6 +67,45 @@ export default function RegistrationPage({ setView }) {
     fontSize: '12px',
     position: 'absolute',
     left: '18%',
+  };
+
+  //qua metterò tutto ciò che serve per l'immagine profilo
+  const [preview, setPreview] = useState(null);
+
+  const createFormData = (data) => {
+    const fd = new FormData();
+
+    // mappatura dei nomi da frontend a backend
+    fd.append('ruolo', data.ruolo);  // se serve nel backend
+    fd.append('specializzazione', data.professione);  // solo per medico
+    fd.append('codice_fiscale', data.codiceFiscale);
+    fd.append('nome', data.nome);
+    fd.append('cognome', data.cognome);
+    fd.append('data_di_nascita', data.nascita);
+    fd.append('genere', data.genere);
+    fd.append('email', data.email);
+    fd.append('telefono', data.telefono);
+    fd.append('password', data.password);
+
+    if (data.immagine) {
+      fd.append('immagine', data.immagine);
+    }
+
+    return fd;
+  }
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Crea un URL temporaneo per l'anteprima
+      const previewUrl = URL.createObjectURL(file);
+      setPreview(previewUrl);
+
+      setFormData(prev => ({
+      ...prev,
+      immagine: file,
+    }));
+    }
   };
 
   return (
@@ -212,6 +255,31 @@ export default function RegistrationPage({ setView }) {
           style={{ position: 'absolute', top: '84%', left: '18%', width: '30%', padding: '5px' }}
         />
         {errors.confermaPassword && <div style={{ ...errorStyle, top: '81.3%' }}>{errors.confermaPassword}</div>}
+
+
+        <div style={{position: 'absolute',
+        width: '14%',
+        height: '28%',
+        top: "18%",
+        left: "2%",
+        fontSize: '108%',
+        border: '1px solid black',
+        display: 'flex',
+        alignItems: 'center',    // Centra verticalmente
+        justifyContent: 'center', // Centra orizzontalmente
+        textAlign: 'center',
+        backgroundColor:'var(--bg-div-color)'}}>Foto profilo:</div>
+
+        <input type="file" accept="image/*" onChange={handleFileChange}
+          style={{position:'absolute', top:"48%", left:"2%"}}/>
+        {preview && (
+          <div style={{position:'absolute', width: '14%', height: '28%',
+          top: '18%', left: '2%', border: '1px solid black' }}>
+            <img src={preview} 
+            alt="Anteprima foto" 
+            style={{ width:'100%', height: '100%' }} />
+          </div>
+          )}
 
         {/* Link login */}
         <p style={{ position: 'absolute', top: '92%', left: '28%' }}>

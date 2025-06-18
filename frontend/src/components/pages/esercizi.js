@@ -5,10 +5,11 @@ import GrayTable from "../graytable";
 import Esercizio from "../esercizi/esercizio";
 import PopUpBig from "../popup/ppbig";
 
-import { getEserciziPerCategoria } from "../../backend"; // importa la funzione
+import { getEserciziPerCategoria, deleteEsercizio, createEsercizio } from "../../backend"; // importa la funzione
 import PlusButton from "../button/plusbutton";
 
 import InfoEsercizio from "../esercizi/infoesercizio";
+import CheckButton from "../button/checkbutton";
 
 export default function EserciziPage({ setView, view }) {
   const [categoria, setCategoria] = useState("Arto inferiore");
@@ -20,6 +21,19 @@ export default function EserciziPage({ setView, view }) {
 
   const [popOn, setPopOn] = useState(false);
   const [EsercizioSelezionato, setEsercizioSelezionato] = useState(null);
+
+  const [isAdd, setIsAdd] = useState(false)
+
+  const [formData, setFormData] = useState({
+    nome: '',
+    video: '',
+    descrizione: ''
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   return (
     <>
@@ -43,7 +57,7 @@ export default function EserciziPage({ setView, view }) {
         fontWeight: "bold"
       }}>
         <div>{categoria}</div>
-        <PlusButton />
+        <PlusButton onClick={()=>setIsAdd(true)}/>
       </div>
 
       {/* Lista esercizi scrollabile */}
@@ -61,7 +75,12 @@ export default function EserciziPage({ setView, view }) {
       }}>
         {esercizi.map((esercizio, index) => (
           <Esercizio key={index} nome={esercizio.nome} 
-          setPopOn={setPopOn} setEsercizioSelezionato={setEsercizioSelezionato}/>
+          setPopOn={setPopOn} setEsercizioSelezionato={setEsercizioSelezionato}
+          onMinusClick={async(nome)=>{
+            await deleteEsercizio(nome);
+            const updated = await getEserciziPerCategoria(categoria);
+            setEsercizi(updated);
+          }}/>
         ))}
       </div>
 
@@ -72,6 +91,74 @@ export default function EserciziPage({ setView, view }) {
           <InfoEsercizio esercizio={EsercizioSelezionato} />
         </>
       )}
+
+      {isAdd && (
+        <>
+          <PopUpBig onClick={()=> {
+            setIsAdd(false);
+            setFormData(()=>({
+              nome:'',
+              video: '',
+              descrizione: ''
+            }));
+          }} onInnerClick={()=> {
+            setIsAdd(false);
+            setFormData(()=>({
+              nome:'',
+              video: '',
+              descrizione: ''
+            }));
+          }}/>
+          <div style={{position:'absolute', top: '12%', left: '15%', width: '68%', height: '70%'}}>
+            <div style={{position:'absolute', top: '3%', left: '25%', fontSize:'120%'}}>Inserimento nuovo esercizio categoria: <b>{categoria}</b></div>
+            <input
+              name="nome"
+              type="text"
+              placeholder="Nome esercizio"
+              value={formData.nome}
+              onChange={handleChange}
+              style={{ position: 'absolute', top: '15%', left: '12%', width: '30%', padding: '5px' }}
+            />
+            <input
+              name="video"
+              type="text"
+              placeholder="Video"
+              value={formData.video}
+              onChange={handleChange}
+              style={{ position: 'absolute', top: '31%', left: '12%', width: '50%', padding: '5px' }}
+            />
+            <input
+              name="descrizione"
+              type="text"
+              placeholder="Descrizione"
+              value={formData.descrizione}
+              onChange={handleChange}
+              style={{ position: 'absolute', top: '47%', left: '12%', width: '50%', height: '30%', padding: '5px' }}
+            />
+            {(formData.nome!=='' && formData.video!=='' && formData.descrizione!=='')&&
+              <div style={{ position: 'absolute', top: '99%', left: '88%'}}>
+                <CheckButton onClick={async()=>{
+                  try {
+                    await createEsercizio(formData.nome, categoria, formData.video, formData.descrizione);
+                    const nuoviEsercizi = await getEserciziPerCategoria(categoria);
+                    setEsercizi(nuoviEsercizi);
+                    setFormData({
+                      nome: '',
+                      video: '',
+                      descrizione: ''
+                    });
+                    setIsAdd(false);
+                  } catch (error) {
+                    console.error("Errore nella creazione dell'esercizio:", error);
+                    // opzionalmente: mostrare un messaggio all'utente
+                  }
+                }}/>
+              </div>
+            }
+          </div>
+        </>
+      )}
+
     </>
   );
 }

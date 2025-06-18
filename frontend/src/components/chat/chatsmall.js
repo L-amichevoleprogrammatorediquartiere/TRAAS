@@ -11,13 +11,13 @@ export default function ChatSmall({ onClick, codiceFiscale }) {
     const [isChatbigger, setChatBigger] = useState(false);
 
     useEffect(() => {
-        const loadMessages = async () => {
+        const loadMessage = async () => {
             const { rendered } = await renderMessages(5,codiceFiscale);
             setRenderedMessages(rendered);
         };
 
-        loadMessages();
-    }, []);
+        loadMessage();
+    }, [codiceFiscale]);
 
     return (
         <>
@@ -65,7 +65,7 @@ export default function ChatSmall({ onClick, codiceFiscale }) {
             {isChatbigger && (
                 <>
                     <PopUpBig onClick={()=> setChatBigger(false)} onInnerClick={()=> setChatBigger(false)}/>
-                    <ChatBig codiceFiscale={codiceFiscale} setChatBigger={setChatBigger}/>  
+                    <ChatBig codiceFiscale={codiceFiscale}/>  
                 </>
             )}
         </>

@@ -1,8 +1,9 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { renderMessages } from "./rendermessage";
 import SendButton from '../button/sendbutton';
+import { inviaMessaggio } from '../../backend';
 
-export default function ChatBig({profile='NomeProfilo',profilePic,   codiceFiscale, setChatBigger}) {
+export default function ChatBig({profile='NomeProfilo',profilePic,   codiceFiscale}) {
     
     //devi mettere che qua viene solo passato il codice fiscale tutte le info
     //se le recuperasse lui sennò che dobbiamo passare un bordello
@@ -12,29 +13,29 @@ export default function ChatBig({profile='NomeProfilo',profilePic,   codiceFisca
     const [messages, setMessages] = useState([]);
     const [value, setValue] = useState('');
     
-    useEffect(() => {
-        const loadMessages = async () => {
-            const container = containerRef.current;
-            if (!container) return;
-      
-            // Salva la distanza dal fondo
-            const scrollFromBottom = container.scrollHeight - container.scrollTop;
-            
-            if(limit-messages.length <= 10){
-                const { rendered } = await renderMessages(limit,codiceFiscale);
-                setMessages(rendered);
-            }
+    const loadMessages = useCallback(async () => {
+        const container = containerRef.current;
+        if (!container) return;
 
-            // Dopo che i messaggi sono aggiornati, ripristina la posizione scroll
-            // Usa un piccolo timeout per assicurarti che il DOM sia aggiornato
-            
-            setTimeout(() => {
-                if (!container) return;
-                container.scrollTop = container.scrollHeight - scrollFromBottom;
-            }, 0);
-        };
-        loadMessages();
-      }, [limit]);
+        // Salva la distanza dal fondo
+        const scrollFromBottom = container.scrollHeight - container.scrollTop;
+
+        if (limit - messages.length <= 10) {
+            const { rendered } = await renderMessages(limit, codiceFiscale);
+            setMessages(rendered);
+        }
+
+        // Ripristina la posizione scroll dopo il render
+        setTimeout(() => {
+            if (!container) return;
+            container.scrollTop = container.scrollHeight - scrollFromBottom;
+        }, 0);
+    }, [limit, messages.length, codiceFiscale]);
+
+  // useEffect chiama loadMessages quando cambia limit
+  useEffect(() => {
+    loadMessages();
+  }, [limit, loadMessages]);
 
     useEffect(() => {
         const container = containerRef.current;
@@ -53,8 +54,17 @@ export default function ChatBig({profile='NomeProfilo',profilePic,   codiceFisca
         };
     }, []);
 
-    const handleMessage = () => {
+    const handleMessage = async () => {
         //controlla se non è vuoto value, manda al server e aggiorna la pagina
+        if(value.trim()){
+            try {
+                const result = await inviaMessaggio(codiceFiscale, value);
+                loadMessages();
+                console.log(result);
+            }catch (error) {
+                console.error(error);
+            }
+        }
         setValue('');
     };
 
