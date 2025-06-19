@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { GetUserRole } from '../backend';
+import fetchPazientiConMessaggi, { GetUserRole } from '../backend';
 import { GetMedici } from '../backend';
 
 import PopUpBig from "./popup/ppbig";
@@ -15,8 +15,22 @@ function Navbar({setView, view}) {
   const [popOn, setPopOn] = useState(false);
   const [codiceFiscaleSelezionato, setCodiceFiscaleSelezionato] = useState(null);
 
+  const [pazientiDaLeggere, setPazientiDaLeggere] = useState(false);
+
   useEffect(() => {
-    GetUserRole().then(setRole);
+    async function checkMessaggi() {
+      const ruolo = await GetUserRole();
+      setRole(ruolo);
+
+      if (ruolo !== 'paziente') {
+        const messaggi = await fetchPazientiConMessaggi();
+        if (messaggi.length > 0) {
+          setPazientiDaLeggere(true);
+        }
+      }
+    }
+
+    checkMessaggi();
   }, []);
 
   async function handleMediciClick() {
@@ -142,7 +156,7 @@ function Navbar({setView, view}) {
                       }}
                       onClick={() => {setPopOn(true);setCodiceFiscaleSelezionato(medico.codiceFiscale)}}
                     >
-                      <img src={medico.immagine} alt={`${medico.nome}`} style={{ width: '25%',  border: "1px solid black" }} />
+                      <img src={`http://localhost:8000${medico.immagine}`} alt={`${medico.nome}`} style={{ width: '25%',  border: "1px solid black" }} />
                       <div style={{ textAlign: 'left', marginLeft: '2%' }}>
                         <div>{medico.nome} {medico.cognome}</div>
                         <div>{medico.specializzazione}</div>
@@ -162,6 +176,19 @@ function Navbar({setView, view}) {
           <ChatSmall codiceFiscale={codiceFiscaleSelezionato}/>
         </>
       )}
+      {pazientiDaLeggere &&
+        <div
+        style={{
+            position: 'absolute',  
+            width: '1.2%',
+            height: '2.5%',
+            top:'6.8%',
+            left: '37%',
+            borderRadius: '50%',
+            backgroundColor: 'var(--bs-primary)',
+            marginLeft: '24%',
+        }}></div>   
+      }
     </>
   );
 }

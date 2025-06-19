@@ -35,7 +35,7 @@ export default function Indicees({setCategoria, setPopOn, setEsercizioSelezionat
                 width: '28%',
                 height: '68%',
                 backgroundColor: 'var(--bg-div-color)',
-                border: '1px solid #212529',
+                border: '0px solid #212529',
                 fontFamily: 'var(--carattere-text)',
             }}
         >

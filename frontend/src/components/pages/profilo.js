@@ -84,10 +84,10 @@ export default function ProfiloPage({setView, view}) {
       <div style={{ position: 'relative', width: '100%', height: '100vh', fontFamily: 'Arial, sans-serif' }}>
         
         {/* HEADER */}
-        <div style={{ position: 'absolute', top: '20%', left: '7%', fontSize: '150%', fontWeight: 'bold' }}>
+        <div style={{ position: 'absolute', top: '25%', left: '8%', fontSize: '150%', fontWeight: 'bold' }}>
           Profilo
         </div>
-        <div style={{ position: 'absolute', top: '20%', right: '9.5%', display: 'flex', gap: '15%' }}>
+        <div style={{ position: 'absolute', top: '25%', right: '9.5%', display: 'flex', gap: '15%' }}>
           {(formData.immagine!=null || formData.nome!=='' || formData.cognome!=='' || 
             formData.dataNascita!=='' || formData.genere!=='' || 
             formData.email!=='' || formData.numeroTelefono!=='' ) &&
@@ -117,11 +117,11 @@ export default function ProfiloPage({setView, view}) {
         <div
           style={{
             position: 'absolute',
-            top: '27%',
+            top: '32%',
             left: '6%',
             width: '55%',
             height: '40%',
-            border: '1px solid black',
+            border: '0px solid black',
             borderRadius: '5px',
             padding: '2%',
             boxSizing: 'border-box',
@@ -134,7 +134,7 @@ export default function ProfiloPage({setView, view}) {
           <div><b>Numero di telefono:</b> {(formData.numeroTelefono === '')? userData.numeroTelefono : formData.numeroTelefono}</div>
           <div><b>Email:</b> {(formData.email === '')? userData.email : formData.email}</div>
 
-          <div style={{ position: 'absolute', bottom: '2%', right: '2%' }}>
+          <div style={{ position: 'absolute', top: '8%', left: '70%' }}>
             <ModifyButton onClick={()=>setPpOn(true)}/>
             {/*CI MANCA TUTTA LA PARTE DI MODIFICA !!!!!!!!!!!!!!!!!!!!!!!!SIAMO IN RITARDO MUOVERSI */}
           </div>
@@ -145,11 +145,11 @@ export default function ProfiloPage({setView, view}) {
           <div
             style={{
             position: 'absolute',
-            top: '70%',
+            top: '60%',
             left: '6%',
             width: '55%',
             height: '20%',
-            border: '1px solid black',
+            border: '0px solid black',
             borderRadius: '5px',
             padding: '2%',
             boxSizing: 'border-box',
@@ -163,8 +163,8 @@ export default function ProfiloPage({setView, view}) {
         <div
           style={{
             position: 'absolute',
-            top: '27%',
-            right: '9.2%',
+            top: '32%',
+            right: '10%',
             width: '22%',
             height: '40%',
             border: '1px solid black',
@@ -200,68 +200,69 @@ export default function ProfiloPage({setView, view}) {
         <>
           <PopUpBig onClick={()=> {setPpOn(false); setFormData(() => ({nome: '', cognome: '', dataNascita: '', genere: '', email: '', numeroTelefono: '',}));}} 
           onInnerClick={()=> {setPpOn(false); setFormData(() => ({nome: '', cognome: '', dataNascita: '', genere: '', email: '', numeroTelefono: '',}));}} />
-            <input
-              name="nome"
-              type="text"
-              placeholder={userData.nome}
-              value={formData.nome}
-              onChange={handleChange}
-              style={{ position: 'absolute', top: '29%', left: '18%', width: '30%', padding: '5px' }}
-            />
+          <div style={{position:'absolute', top: '17%', left: '42.5%', fontSize:'130%'}}>Modifica profilo</div>
+          <input
+            name="nome"
+            type="text"
+            placeholder={userData.nome}
+            value={formData.nome}
+            onChange={handleChange}
+            style={{ position: 'absolute', top: '29%', left: '18%', width: '30%', padding: '5px' }}
+          />
 
-            <input
-              name="cognome"
-              type="text"
-              placeholder={userData.cognome}
-              value={formData.cognome}
-              onChange={handleChange}
-              style={{ position: 'absolute', top: '37%', left: '18%', width: '30%', padding: '5px' }}
-            />
+          <input
+            name="cognome"
+            type="text"
+            placeholder={userData.cognome}
+            value={formData.cognome}
+            onChange={handleChange}
+            style={{ position: 'absolute', top: '37%', left: '18%', width: '30%', padding: '5px' }}
+          />
 
-            <div style={{ position: 'absolute', top: '46%', left: '18%', display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <label>Data di nascita:</label>
-              <input
-                name="nascita"
-                type="date"
-                value={formData.dataNascita}
+          <div style={{ position: 'absolute', top: '46%', left: '18%', display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <label>Data di nascita:</label>
+            <input
+              name="nascita"
+              type="date"
+              value={formData.dataNascita}
+              onChange={handleChange}
+              style={{ padding: '5px' }}
+            />
+          </div>
+
+          <div style={{ position: 'absolute', top: '54%', left: '18%' }}>
+            <span>Genere:</span>
+            <label style={{ marginLeft: '10px' }}>
+              <input type="radio" name="genere" value="M"
+                checked={formData.genere === 'M'}
                 onChange={handleChange}
-                style={{ padding: '5px' }}
-              />
-            </div>
+              /> M
+            </label>
+            <label style={{ marginLeft: '20px' }}>
+              <input type="radio" name="genere" value="F"
+                checked={formData.genere === 'F'}
+                onChange={handleChange}
+              /> F
+            </label>
+          </div>
 
-            <div style={{ position: 'absolute', top: '54%', left: '18%' }}>
-              <span>Genere:</span>
-              <label style={{ marginLeft: '10px' }}>
-                <input type="radio" name="genere" value="M"
-                  checked={formData.genere === 'M'}
-                  onChange={handleChange}
-                /> M
-              </label>
-              <label style={{ marginLeft: '20px' }}>
-                <input type="radio" name="genere" value="F"
-                  checked={formData.genere === 'F'}
-                  onChange={handleChange}
-                /> F
-              </label>
-            </div>
+          <input
+            name="email"
+            type="email"
+            placeholder={userData.email}
+            value={formData.email}
+            onChange={handleChange}
+            style={{ position: 'absolute', top: '60%', left: '18%', width: '30%', padding: '5px' }}
+          />
 
-            <input
-              name="email"
-              type="email"
-              placeholder={userData.email}
-              value={formData.email}
-              onChange={handleChange}
-              style={{ position: 'absolute', top: '60%', left: '18%', width: '30%', padding: '5px' }}
-            />
-
-            <input
-              name="telefono"
-              type="tel"
-              placeholder={userData.numeroTelefono}
-              value={formData.numeroTelefono}
-              onChange={handleChange}
-              style={{ position: 'absolute', top: '68%', left: '18%', width: '30%', padding: '5px' }}
-            />
+          <input
+            name="telefono"
+            type="tel"
+            placeholder={userData.numeroTelefono}
+            value={formData.numeroTelefono}
+            onChange={handleChange}
+            style={{ position: 'absolute', top: '68%', left: '18%', width: '30%', padding: '5px' }}
+          />
           {(formData.nome!=='' || formData.cognome!=='' || 
             formData.dataNascita!=='' || formData.genere!=='' || 
             formData.email!=='' || formData.numeroTelefono!=='' ) &&

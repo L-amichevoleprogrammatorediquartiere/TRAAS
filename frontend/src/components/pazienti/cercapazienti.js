@@ -40,7 +40,7 @@ export default function CercaPaziente({setPopOn, setCodiceFiscaleSelezionato}) {
 
   return (
     <div
-      style={{position: 'absolute', width: '35%', height: '70%', top: '20%', left: '5%', backgroundColor: "var(--bg-div-color)", border: "1px solid black"}}
+      style={{position: 'absolute', width: '35%', height: '70%', top: '20%', left: '5%', backgroundColor: "var(--bg-div-color)"}}
     >
       {/* Barra di ricerca */}
       <div className="d-flex mb-2" style={{position:'absolute', height: '10%', width: '80%', top: '2%', left: '3%' }}>
@@ -69,6 +69,13 @@ export default function CercaPaziente({setPopOn, setCodiceFiscaleSelezionato}) {
             setPopOn={setPopOn} setCodiceFiscaleSelezionato={setCodiceFiscaleSelezionato}
           />
         ))}
+        {risultati.length === 0 &&
+          <div style={{color: 'gray', fontStyle: 'italic', position: 'absolute',
+             top: '20%', left: '9%', width:'70%'
+          }}>
+            Inizia a digitare: puoi cercare per nome, cognome, codice fiscale o patologia. I risultati appariranno qui.
+          </div> 
+        }
       </div>
     </div>
   );

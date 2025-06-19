@@ -30,7 +30,7 @@ export default function Esercizio({ nome, setPopOn, setEsercizioSelezionato, onM
         style={{
           position: 'relative',
           top: '-50%',   // spostalo verticalmente (percentuale dell'altezza del contenitore)
-          left: '70%',  // spostalo orizzontalmente
+          left: '75%',  // spostalo orizzontalmente
           width: '5%',
         }}
       >
