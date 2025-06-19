@@ -570,3 +570,28 @@ export async function createEsercizio(nome,categoria,video,descrizione){
     throw error;
   }
 }
+
+
+export async function fetchPazientiAssociati(codiceFiscale) {   //NON TOCCARE CHE FUNZIONA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  try {
+    const token = await checkAndRefreshToken();
+
+    const response = await fetch(`${API_BASE}/fetchPazientiAssociati/`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('Errore nel recupero dei pazienti con messaggi');
+    }
+
+    const data = await response.json();
+    console.log(data);
+    return data;
+  }catch (error) {
+    console.error('Errore in fetchPazientiAssociati:', error.message);
+    return null;
+  }
+}
