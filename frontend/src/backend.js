@@ -49,7 +49,7 @@ export function CercaPazienti(query) {
 // ritorna ruolo utente che può essere medico o paziente
 export function GetUserRole() {
   return new Promise((resolve) => {
-    setTimeout(() => resolve('medico'), 100); // cambia in 'medico' per testare entrambi i casi
+    setTimeout(() => resolve('paziente'), 100); // cambia in 'medico' per testare entrambi i casi
   });
 }
 
@@ -114,4 +114,67 @@ export function FetchVisite() {
       }
     ]), 100);
   });
+}
+
+// funzioni fake aggiunte da peppe
+
+
+export function SedutaPaziente() {
+  const sedutePazienteMock = [
+    { id: 1, data: "2024-01-01", valutazione: "valutazione: bassa" },
+    { id: 2, data: "2024-01-15", valutazione: "valutazione: media" },
+    { id: 3, data: "2024-01-29", valutazione: "valutazione: alta" },
+  ];
+
+  return sedutePazienteMock;
+}
+
+export function SedutaMedico() {
+  const seduteMedicoMock = [
+    {
+      id: 1,
+      data: "2024-01-01",
+      codice_fiscale: "RSSMRA85T10H501Z",
+      valutazione: "valutazione: bassa",
+      tiposeduta: "Sincrona",
+    },
+    {
+      id: 2,
+      data: "2024-01-15",
+      codice_fiscale: "VRDLGI92E15F205S",
+      valutazione: "valutazione: media",
+      tiposeduta: "Sincrona",
+    },
+    {
+      id: 3,
+      data: "2024-01-27",
+      codice_fiscale: "BNCLRA78A01H501D",
+      valutazione: "valutazione: alta",
+      tiposeduta: "Sincrona",
+    },
+    {
+      id: 4,
+      data: "2024-01-28",
+      codice_fiscale: "BNCLRA78A01H501D",
+      valutazione: "valutazione: alta",
+      tiposeduta: "Asincrona",
+    },
+    {
+      id: 5,
+      data: "2024-01-29",
+      codice_fiscale: "BNCLRA78A01H501D",
+      valutazione: "valutazione: alta",
+      tiposeduta: "Asincrona",
+    },
+  ];
+
+  return seduteMedicoMock;
+}
+
+export function InfoPaziente() {
+  return [
+    { id: 1, testo: "Respirazione Diaframmatica", descrizione: "Descrizione mock esercizio 1" },
+    { id: 2, testo: "Rilassamento Muscolare Progressivo", descrizione: "Descrizione mock esercizio 2" },
+    { id: 3, testo: "Esercizio di Visualizzazione", descrizione: "Descrizione mock esercizio 3" },
+  ];
 }

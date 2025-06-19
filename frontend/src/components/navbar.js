@@ -43,6 +43,12 @@ function Navbar({setView, view}) {
           setView('sedute')
         }
         break;
+      case 'Sedute':
+        if (view!== 'sedute'){
+          setView('sedute')
+        }
+        break;
+
     }
   }
 
