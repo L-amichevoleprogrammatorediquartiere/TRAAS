@@ -1,6 +1,6 @@
 import OpenButton from "../button/openbutton";
 
-export default function Paziente({ codiceFiscale, patologia }) {
+export default function Paziente({ codiceFiscale, patologia, setPopOn, setCodiceFiscaleSelezionato }) {
   return (
     <div
       style={{
@@ -37,7 +37,7 @@ export default function Paziente({ codiceFiscale, patologia }) {
       </div>
 
       {/* Bottone a destra */}
-      <OpenButton />
+      <OpenButton onClick={() => {setPopOn(true); setCodiceFiscaleSelezionato(codiceFiscale)}}/>
     </div>
   );
 }

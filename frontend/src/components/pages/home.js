@@ -12,13 +12,12 @@ export default function HomePage({setView, view}) {
       // Recupera il ruolo al caricamento del componente
       GetUserRole().then((role) => {
       setUserRole(role);
+      console.log(role);
     });
   }, []);
 
   return (
     <>
-      <Navbar setView={setView} view={view} />
-
       {userRole === 'medico' && (
         <>
           <GrayTable />
@@ -42,6 +41,7 @@ export default function HomePage({setView, view}) {
       )}
 
       <Phrases />
+      <Navbar setView={setView} view={view} />
     </>
   );
 }
