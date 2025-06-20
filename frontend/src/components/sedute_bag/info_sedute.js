@@ -6,7 +6,7 @@ import { useState } from "react";
 // Componente esercizio della lista
 function EsercizioDaFare({ testo, bottone }) {
   return (
-    <div className="container">
+    <div className="container" style={{marginTop:'1.8%'}}>
       <div className="row align-items-center">
         <div className="col">
           <p>{testo}</p>
@@ -39,8 +39,8 @@ export default function ContenitoreInfoPaziente({ showPopup, onClosePopup, sedut
         style={{
           position: "fixed",
           top: "12%",
-          left: "16%",
-          width: "68%",
+          left: "19%",
+          width: "60%",
           height: "76%",
           overflowY: "auto",
           zIndex: 1060,
@@ -78,7 +78,6 @@ export default function ContenitoreInfoPaziente({ showPopup, onClosePopup, sedut
                 height="315"
                 src="https://www.youtube.com/embed/dQw4w9WgXcQ" // Video mockato
                 title="Esercizio Video"
-                frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
               ></iframe>
@@ -102,8 +101,9 @@ export default function ContenitoreInfoPaziente({ showPopup, onClosePopup, sedut
             <div
               key={esercizio.id}
               style={{
-                margin: "1cm 4cm",
-                border: "2px solid #555",
+                margin: "4% 10%",
+                height: "16%",
+                border: "1px solid black",
                 borderRadius: "6px",
                 padding: "10px 20px",
                 backgroundColor: "#eee",

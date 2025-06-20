@@ -3,7 +3,7 @@ import { ContenitoreSeduteMedico, ContenitoreSedutePaziente } from "./contenitor
 
 export default function SeduteWrapper({ userRole }) {
   return (
-    <div style={{ position: 'relative', width: '100%', height: '90vh' }}>
+    <div>
       {/* Sfondo grigio */}
       <GrayTable />
 
@@ -17,7 +17,6 @@ export default function SeduteWrapper({ userRole }) {
           height: '72%',
           overflowY: 'auto',
           padding: '10px',
-          zIndex: 10, // Più alto dello sfondo
         }}
       >
         {userRole === 'medico' && <ContenitoreSeduteMedico />}
