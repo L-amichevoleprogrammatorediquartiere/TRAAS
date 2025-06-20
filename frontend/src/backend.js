@@ -632,3 +632,75 @@ export async function aggiungiSeduta(codiceFiscale, data, tipo, esercizi) {
     return null;
   }
 }
+
+
+
+
+
+//PEPPE FUNZIONI SUE QUA SOTTO DA PASSARE A VERE
+
+export function SedutaPaziente() {
+  const sedutePazienteMock = [
+    { id: 1, data: "2024-01-01", valutazione: "valutazione: bassa" },
+    { id: 2, data: "2024-01-15", valutazione: "valutazione: media" },
+    { id: 3, data: "2024-01-29", valutazione: "valutazione: alta" },
+  ];
+
+  return sedutePazienteMock;
+}
+
+export function SedutaMedico() {
+  const seduteMedicoMock = [
+    {
+      id: 1,
+      data: "2024-01-01",
+      codice_fiscale: "RSSMRA85T10H501Z",
+      valutazione: "valutazione: bassa",
+      tiposeduta: "Sincrona",
+    },
+    {
+      id: 2,
+      data: "2024-01-15",
+      codice_fiscale: "VRDLGI92E15F205S",
+      valutazione: "valutazione: media",
+      tiposeduta: "Sincrona",
+    },
+    {
+      id: 3,
+      data: "2024-01-27",
+      codice_fiscale: "BNCLRA78A01H501D",
+      valutazione: "valutazione: alta",
+      tiposeduta: "Sincrona",
+    },
+    {
+      id: 4,
+      data: "2024-01-28",
+      codice_fiscale: "BNCLRA78A01H501D",
+      valutazione: "valutazione: alta",
+      tiposeduta: "Asincrona",
+    },
+    {
+      id: 5,
+      data: "2024-01-29",
+      codice_fiscale: "BNCLRA78A01H501D",
+      valutazione: "valutazione: alta",
+      tiposeduta: "Asincrona",
+    },
+  ];
+
+  return seduteMedicoMock;
+}
+
+export function InfoPaziente() {
+  return [
+    { id: 1, testo: "Respirazione Diaframmatica", descrizione: "Descrizione mock esercizio 1" },
+    { id: 2, testo: "Rilassamento Muscolare Progressivo", descrizione: "Descrizione mock esercizio 2" },
+    { id: 3, testo: "Esercizio di Visualizzazione", descrizione: "Descrizione mock esercizio 3" },
+    { id: 4, testo: "Respirazione Diaframmatica", descrizione: "Descrizione mock esercizio 1" },
+    { id: 5, testo: "Rilassamento Muscolare Progressivo", descrizione: "Descrizione mock esercizio 2" },
+    { id: 6, testo: "Esercizio di Visualizzazione", descrizione: "Descrizione mock esercizio 3" },
+    { id: 7, testo: "Respirazione Diaframmatica", descrizione: "Descrizione mock esercizio 1" },
+    { id: 8, testo: "Rilassamento Muscolare Progressivo", descrizione: "Descrizione mock esercizio 2" },
+    { id: 9, testo: "Esercizio di Visualizzazione", descrizione: "Descrizione mock esercizio 3" },
+  ];
+}

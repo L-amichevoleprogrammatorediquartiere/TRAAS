@@ -9,7 +9,7 @@ import { getEserciziPerCategoria, deleteEsercizio, createEsercizio } from "../..
 import PlusButton from "../button/plusbutton";
 
 import InfoEsercizio from "../esercizi/infoesercizio";
-import CheckButton from "../button/checkbutton";
+import AddEsercizio from "../esercizi/addesercizio";
 
 export default function EserciziPage({ setView, view }) {
   const [categoria, setCategoria] = useState("Arto inferiore");
@@ -23,17 +23,6 @@ export default function EserciziPage({ setView, view }) {
   const [EsercizioSelezionato, setEsercizioSelezionato] = useState(null);
 
   const [isAdd, setIsAdd] = useState(false)
-
-  const [formData, setFormData] = useState({
-    nome: '',
-    video: '',
-    descrizione: ''
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
 
   return (
     <>
@@ -92,73 +81,7 @@ export default function EserciziPage({ setView, view }) {
         </>
       )}
 
-      {isAdd && (
-        <>
-          <PopUpBig onClick={()=> {
-            setIsAdd(false);
-            setFormData(()=>({
-              nome:'',
-              video: '',
-              descrizione: ''
-            }));
-          }} onInnerClick={()=> {
-            setIsAdd(false);
-            setFormData(()=>({
-              nome:'',
-              video: '',
-              descrizione: ''
-            }));
-          }}/>
-          <div style={{position:'absolute', top: '12%', left: '15%', width: '68%', height: '70%'}}>
-            <div style={{position:'absolute', top: '3%', left: '25%', fontSize:'120%'}}>Inserimento nuovo esercizio categoria: <b>{categoria}</b></div>
-            <input
-              name="nome"
-              type="text"
-              placeholder="Nome esercizio"
-              value={formData.nome}
-              onChange={handleChange}
-              style={{ position: 'absolute', top: '15%', left: '12%', width: '30%', padding: '5px' }}
-            />
-            <input
-              name="video"
-              type="text"
-              placeholder="Video"
-              value={formData.video}
-              onChange={handleChange}
-              style={{ position: 'absolute', top: '31%', left: '12%', width: '50%', padding: '5px' }}
-            />
-            <input
-              name="descrizione"
-              type="text"
-              placeholder="Descrizione"
-              value={formData.descrizione}
-              onChange={handleChange}
-              style={{ position: 'absolute', top: '47%', left: '12%', width: '50%', height: '30%', padding: '5px' }}
-            />
-            {(formData.nome!=='' && formData.video!=='' && formData.descrizione!=='')&&
-              <div style={{ position: 'absolute', top: '99%', left: '88%'}}>
-                <CheckButton onClick={async()=>{
-                  try {
-                    await createEsercizio(formData.nome, categoria, formData.video, formData.descrizione);
-                    const nuoviEsercizi = await getEserciziPerCategoria(categoria);
-                    setEsercizi(nuoviEsercizi);
-                    setFormData({
-                      nome: '',
-                      video: '',
-                      descrizione: ''
-                    });
-                    setIsAdd(false);
-                  } catch (error) {
-                    console.error("Errore nella creazione dell'esercizio:", error);
-                    // opzionalmente: mostrare un messaggio all'utente
-                  }
-                }}/>
-              </div>
-            }
-          </div>
-        </>
-      )}
-
+      {isAdd && <AddEsercizio setIsAdd={setIsAdd} categoria={categoria} setEsercizi={setEsercizi}/>}
     </>
   );
 }
