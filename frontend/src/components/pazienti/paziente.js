@@ -1,6 +1,6 @@
 import OpenButton from "../button/openbutton";
 
-export default function Paziente({ codiceFiscale, patologia }) {
+export default function Paziente({ codiceFiscale, patologia, setPopOn, setCodiceFiscaleSelezionato, blu }) {
   return (
     <div
       style={{
@@ -20,7 +20,8 @@ export default function Paziente({ codiceFiscale, patologia }) {
         <div style={{ display: 'flex', alignItems: 'center', marginBottom: '5%' }}>
           <div>{codiceFiscale}</div>
           {/* Cerchietto blu */}
-          <div
+          {blu &&
+            <div
             style={{
                 position: 'absolute',  
                 width: '2.4%',
@@ -28,8 +29,8 @@ export default function Paziente({ codiceFiscale, patologia }) {
                 borderRadius: '50%',
                 backgroundColor: 'var(--bs-primary)',
                 marginLeft: '24%',
-            }}
-          ></div>
+            }}></div>   
+          }
         </div>
 
         {/* Patologia */}
@@ -37,7 +38,7 @@ export default function Paziente({ codiceFiscale, patologia }) {
       </div>
 
       {/* Bottone a destra */}
-      <OpenButton />
+      <OpenButton onClick={() => {setPopOn(true); setCodiceFiscaleSelezionato(codiceFiscale)}}/>
     </div>
   );
 }

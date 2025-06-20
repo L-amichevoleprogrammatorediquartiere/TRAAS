@@ -1,10 +1,51 @@
-import Scritta from '../scritta.js'
+import { useState } from 'react';
+import Scritta from '../scritta.js';
+import {login} from '../../backend.js';
 
-export default function LoginPage() {
-  
+export default function LoginPage({ setView }) {
+  const [formData, setFormData] = useState({
+    codiceFiscale: '',
+    password: '',
+  });
+
+  const [errors, setErrors] = useState({});
+
   const handleRegisterClick = () => {
-    // Qui andrai a definire la logica per la registrazione
-    console.log('Registrati cliccato');
+    setView("registration");
+  };
+
+  const handleChange = (field, value) => {
+    setFormData({ ...formData, [field]: value });
+
+    // Rimuove l'errore appena si modifica il campo
+    if (errors[field]) {
+      setErrors({ ...errors, [field]: null });
+    }
+  };
+
+  const handleSubmit = async () => {
+    const newErrors = {};
+    if (!formData.codiceFiscale) {
+      newErrors.codiceFiscale = "Il codice fiscale è obbligatorio.";
+    }
+    if (!formData.password) {
+      newErrors.password = "La password è obbligatoria.";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    try {
+      await login(formData.codiceFiscale, formData.password);
+      console.log("Login effettuato con successo");
+      
+      setView("home");
+
+    }catch (err) {
+      setErrors({ general: err.message });
+    }
   };
 
   return (
@@ -17,15 +58,43 @@ export default function LoginPage() {
         <input
           type="text"
           placeholder="Codice fiscale"
-          style={{ position: 'absolute', top: '33%', left: '25%', width: '250px', padding: '8px' }}
+          value={formData.codiceFiscale}
+          onChange={(e) => handleChange('codiceFiscale', e.target.value)}
+          style={{
+            position: 'absolute',
+            top: '33%',
+            left: '25%',
+            width: '250px',
+            padding: '8px',
+            border: '1px solid gray',
+          }}
         />
+        {errors.codiceFiscale && (
+          <span style={{ color: 'red', position: 'absolute', top: '39%', left: '25%', fontSize:'80%' }}>
+            {errors.codiceFiscale}
+          </span>
+        )}
 
         {/* Input Password */}
         <input
           type="password"
           placeholder="Password"
-          style={{ position: 'absolute', top: '46%', left: '25%', width: '250px', padding: '8px' }}
+          value={formData.password}
+          onChange={(e) => handleChange('password', e.target.value)}
+          style={{
+            position: 'absolute',
+            top: '46%',
+            left: '25%',
+            width: '250px',
+            padding: '8px',
+            border: '1px solid gray',
+          }}
         />
+        {errors.password && (
+          <span style={{ color: 'red', position: 'absolute', top: '52%', left: '25%', fontSize:'80%' }}>
+            {errors.password}
+          </span>
+        )}
 
         {/* Scritta Registrati */}
         <p style={{ position: 'absolute', top: '60%', left: '17%' }}>
@@ -40,6 +109,7 @@ export default function LoginPage() {
 
         {/* Bottone Avanti */}
         <button
+          onClick={handleSubmit}
           style={{
             position: 'absolute',
             top: '58%',
@@ -50,10 +120,8 @@ export default function LoginPage() {
         >
           Avanti
         </button>
-
-        
       </div>
-      <Scritta/>
+      <Scritta />
     </>
   );
 }

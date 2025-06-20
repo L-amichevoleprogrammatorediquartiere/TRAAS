@@ -1,44 +1,14 @@
 import { useEffect, useState } from 'react';
+import { caricaEsercizi } from '../../backend';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
-export default function Indicees() {
+export default function Indicees({setCategoria, setPopOn, setEsercizioSelezionato}) {
     const [dati, setDati] = useState([]);
     const [categoriaAperta, setCategoriaAperta] = useState(null); // solo una aperta
 
     useEffect(() => {
-        // Dati inseriti "hardcoded" direttamente dentro useEffect
-        const datiMock = [
-            { nome: 'Estensione ginocchio da seduto', categoria: 'Arto inferiore' },
-            { nome: 'Sollevamento gamba tesa', categoria: 'Arto inferiore' },
-            { nome: 'Abduzione dell’anca in decubito laterale', categoria: 'Arto inferiore' },
-            { nome: 'Flessione plantare in piedi', categoria: 'Arto inferiore' },
-    
-            { nome: 'Sollevamento del braccio con bastone', categoria: 'Arto superiore' },
-            { nome: 'Rotazione esterna della spalla', categoria: 'Arto superiore' },
-            { nome: 'Estensione del gomito con pesetti', categoria: 'Arto superiore' },
-            { nome: 'Mobilizzazione del polso con palla', categoria: 'Arto superiore' },
-    
-            { nome: 'Rotazioni del tronco da seduto', categoria: 'Busto' },
-            { nome: 'Flessioni laterali del busto in piedi', categoria: 'Busto' },
-            { nome: 'Estensione lombare a pancia in giù', categoria: 'Busto' },
-    
-            { nome: 'Rotazioni del collo', categoria: 'Collo' },
-            { nome: 'Flessioni laterali del collo', categoria: 'Collo' },
-            { nome: 'Chin tucks (ritrazione cervicale)', categoria: 'Collo' },
-    
-            { nome: 'Camminata su linea retta', categoria: 'Equilibrio' },
-            { nome: 'Stazione su un piede', categoria: 'Equilibrio' },
-            { nome: 'Passaggi da seduto a in piedi senza mani', categoria: 'Equilibrio' },
-    
-            { nome: 'Respirazione diaframmatica', categoria: 'Respirazione' },
-            { nome: 'Espirazione con labbra socchiuse', categoria: 'Respirazione' },
-            { nome: 'Espansione toracica controllata', categoria: 'Respirazione' },
-        ];
-  
-      // Simula una chiamata asincrona (opzionale)
-      // per mantenere il pattern "promise"
-        Promise.resolve(datiMock).then(data => {
-            setDati(data); 
+        caricaEsercizi().then((data) => {
+        setDati(data);
         });
     }, []);
 
@@ -50,6 +20,7 @@ export default function Indicees() {
 
     const toggleCategoria = (categoria) => {
         console.log(categoria)
+        setCategoria(categoria);
         setCategoriaAperta(prev =>
             prev === categoria ? null : categoria
         );
@@ -64,7 +35,7 @@ export default function Indicees() {
                 width: '28%',
                 height: '68%',
                 backgroundColor: 'var(--bg-div-color)',
-                border: '1px solid #212529',
+                border: '0px solid #212529',
                 fontFamily: 'var(--carattere-text)',
             }}
         >
@@ -126,7 +97,7 @@ export default function Indicees() {
                                                 marginLeft: '10px',
                                                 fontSize: '14px',
                                             }}
-                                            onClick={() => alert(`Hai cliccato: ${nome}`)}
+                                            onClick={() => {setPopOn(true);setEsercizioSelezionato(nome)}}
                                         >
                                             - {nome}
                                         </button>

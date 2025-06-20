@@ -26,7 +26,7 @@ export default function Phrases() {
       alignItems: 'center',
       justifyContent: 'center',
       fontSize: '110%',
-      fontStyle: 'italic'
+      fontStyle: 'italic',
     }}>
       {randomQuote}
     </div>
