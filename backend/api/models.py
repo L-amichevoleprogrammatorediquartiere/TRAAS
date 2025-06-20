@@ -42,15 +42,16 @@ class Seduta(models.Model):
     paziente = models.ForeignKey(Paziente, on_delete=models.CASCADE)
     medico = models.ForeignKey(Medico, on_delete=models.CASCADE)
     data = models.DateTimeField()
-    video = models.CharField(max_length=255)
-    evaluate_rt = models.TextField()
-    evaluate_pt = models.TextField()
     
+    video = models.CharField(max_length=255, blank=True, null=True)
+    evaluate_rt = models.TextField(blank=True, null=True)
+    evaluate_pt = models.TextField(blank=True, null=True)
+
     TIPO_CHOICES = [
         ('sincrono', 'Sincrono'),
         ('asincrono', 'Asincrono'),
     ]
-    tipo = models.CharField(max_length=10, choices=TIPO_CHOICES)
+    tipo = models.CharField(max_length=10, choices=TIPO_CHOICES, blank=True, null=True)
 
 
 # Contiene (relazione N:N tra Seduta ed Esercizio)

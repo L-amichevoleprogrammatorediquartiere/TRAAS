@@ -573,7 +573,7 @@ export async function createEsercizio(nome,categoria,video,descrizione){
 }
 
 
-export async function fetchPazientiAssociati(codiceFiscale) {   //NON TOCCARE CHE FUNZIONA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+export async function fetchPazientiAssociati() {   //NON TOCCARE CHE FUNZIONA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   try {
     const token = await checkAndRefreshToken();
 
@@ -593,6 +593,42 @@ export async function fetchPazientiAssociati(codiceFiscale) {   //NON TOCCARE CH
     return data;
   }catch (error) {
     console.error('Errore in fetchPazientiAssociati:', error.message);
+    return null;
+  }
+}
+
+
+
+export async function aggiungiSeduta(codiceFiscale, data, tipo, esercizi) {
+  try {
+    const token = await checkAndRefreshToken();
+
+    const response = await fetch(`${API_BASE}/aggiungiSeduta/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        codiceFiscale,
+        data,
+        tipo,
+        esercizi, // array di nomi esercizi
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('Errore nella creazione della seduta:', errorData);
+      throw new Error('Errore nella creazione della seduta');
+    }
+
+    const result = await response.json();
+    console.log('Seduta creata con successo:', result);
+    return result;
+
+  } catch (error) {
+    console.error('Errore in creaSeduta:', error.message);
     return null;
   }
 }

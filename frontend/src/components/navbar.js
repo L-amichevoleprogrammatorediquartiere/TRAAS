@@ -3,9 +3,7 @@ import { useEffect, useState } from 'react';
 import fetchPazientiConMessaggi, { GetUserRole } from '../backend';
 import { GetMedici } from '../backend';
 
-import PopUpBig from "./popup/ppbig";
-import ChatSmall from "./chat/chatsmall";
-import InfoUser from "./popup/infouser";
+import InfoChat from "./popup/infochat";
 
 function Navbar({setView, view}) {
   const [role, setRole] = useState(null);
@@ -154,9 +152,9 @@ function Navbar({setView, view}) {
                         backgroundColor: '#fff',
                         cursor: 'pointer'
                       }}
-                      onClick={() => {setPopOn(true);setCodiceFiscaleSelezionato(medico.codiceFiscale)}}
+                      onClick={() => {setPopOn(true);setCodiceFiscaleSelezionato(medico.codiceFiscale);}}
                     >
-                      <img src={`http://localhost:8000${medico.immagine}`} alt={`${medico.nome}`} style={{ width: '25%',  border: "1px solid black" }} />
+                      <img src={`http://localhost:8000${medico.immagine}`} alt={`${medico.nome}`} style={{ width: '20%',  border: "1px solid black" }} />
                       <div style={{ textAlign: 'left', marginLeft: '2%' }}>
                         <div>{medico.nome} {medico.cognome}</div>
                         <div>{medico.specializzazione}</div>
@@ -169,13 +167,9 @@ function Navbar({setView, view}) {
           );
         })}
       </div>
-      {popOn && (
-        <>
-          <PopUpBig onClick={()=> setPopOn(false)} onInnerClick={()=> setPopOn(false)}/>
-          <InfoUser codiceFiscale={codiceFiscaleSelezionato} />
-          <ChatSmall codiceFiscale={codiceFiscaleSelezionato}/>
-        </>
-      )}
+      {popOn && 
+        <InfoChat setPopOn={setPopOn} codiceFiscaleSelezionato={codiceFiscaleSelezionato}/>
+      }
       {pazientiDaLeggere &&
         <div
         style={{

@@ -3,7 +3,7 @@ import { renderMessages } from "./rendermessage";
 import SendButton from '../button/sendbutton';
 import { inviaMessaggio } from '../../backend';
 
-export default function ChatBig({profile='NomeProfilo',profilePic,   codiceFiscale}) {
+export default function ChatBig({profilePic, profile, codiceFiscale}) {
     
     //devi mettere che qua viene solo passato il codice fiscale tutte le info
     //se le recuperasse lui sennò che dobbiamo passare un bordello
@@ -143,7 +143,7 @@ export default function ChatBig({profile='NomeProfilo',profilePic,   codiceFisca
             </div>
 
             <img
-                src={profilePic}
+                src={`http://localhost:8000${profilePic}`}
                 alt="pfp"
                 style={{ 
                     position: 'absolute',

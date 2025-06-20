@@ -1,14 +1,19 @@
 import ExpandButton from "../button/fullscreenbutton";
-import { useState, useEffect } from 'react';
+import { useState, useEffect} from 'react';
 import { renderMessages } from "./rendermessage";
 
 import ChatBig from "./chatbig";
 import PopUpBig from "../popup/ppbig";
 
-export default function ChatSmall({ onClick, codiceFiscale }) {
+import { GetUserRole, RecuperaInfoPaziente, RecuperaInfoMedico } from "../../backend";
+
+export default function ChatSmall({ onClick, codiceFiscale}) {
 
     const [messages, setRenderedMessages] = useState([]);
     const [isChatbigger, setChatBigger] = useState(false);
+
+    const [img, setImg]= useState(null);
+    const [profile, setProfile]= useState('');
 
     useEffect(() => {
         const loadMessage = async () => {
@@ -17,6 +22,23 @@ export default function ChatSmall({ onClick, codiceFiscale }) {
         };
 
         loadMessage();
+        
+        async function fetchData() {
+            const currentUserRole = await GetUserRole();
+        
+            if (currentUserRole !== "medico") {
+                const data = await RecuperaInfoMedico(codiceFiscale);
+                setImg(data.immagine);
+                setProfile("Dott. " + data.nome + " " + data.cognome);
+            }   
+            else {
+                const data = await RecuperaInfoPaziente(codiceFiscale);
+                setImg(data.immagine);
+                setProfile(data.codice_fiscale);
+            }
+        }
+
+        fetchData();
     }, [codiceFiscale]);
 
     return (
@@ -65,7 +87,7 @@ export default function ChatSmall({ onClick, codiceFiscale }) {
             {isChatbigger && (
                 <>
                     <PopUpBig onClick={()=> setChatBigger(false)} onInnerClick={()=> setChatBigger(false)}/>
-                    <ChatBig codiceFiscale={codiceFiscale}/>  
+                    <ChatBig codiceFiscale={codiceFiscale} profilePic={img} profile={profile}/>
                 </>
             )}
         </>
