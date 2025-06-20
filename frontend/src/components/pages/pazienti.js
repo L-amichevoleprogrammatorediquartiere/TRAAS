@@ -4,13 +4,15 @@ import Navbar from "../navbar";
 import CercaPazienti from "../pazienti/cercapazienti";
 import Paziente from "../pazienti/paziente";
 import fetchPazientiConMessaggi,{fetchPazientiAssociati} from "../../backend";
-import PopUpBig from "../popup/ppbig";
-import ChatSmall from "../chat/chatsmall";
-import InfoUser from "../popup/infouser";
+
+import InfoChat from "../popup/infochat";
 
 export default function PazientiPage({setView, view}) {
   const [pazientiConMessaggi, setPazientiConMessaggi] = useState([]);
   const [pazientiAssociati, setPazientiAssociati] = useState([]);
+
+  const [popOn, setPopOn] = useState(false);
+  const [codiceFiscaleSelezionato, setCodiceFiscaleSelezionato] = useState(null);
 
   useEffect(() => {
     async function loadPazienti() {
@@ -34,9 +36,6 @@ export default function PazientiPage({setView, view}) {
 
   loadPazienti();
   }, []);
-
-  const [popOn, setPopOn] = useState(false);
-  const [codiceFiscaleSelezionato, setCodiceFiscaleSelezionato] = useState(null);
 
   return (
     <>
@@ -77,9 +76,7 @@ export default function PazientiPage({setView, view}) {
       </div>
       {popOn && (
         <>
-          <PopUpBig onClick={()=> setPopOn(false)} onInnerClick={()=> setPopOn(false)}/>
-          <InfoUser codiceFiscale={codiceFiscaleSelezionato} />
-          <ChatSmall codiceFiscale={codiceFiscaleSelezionato}/>
+          <InfoChat setPopOn={setPopOn} codiceFiscaleSelezionato={codiceFiscaleSelezionato}/>
         </>
       )}
     </>
