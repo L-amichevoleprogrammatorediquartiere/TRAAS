@@ -1,7 +1,7 @@
-import GrayTable from "./graytable";
-import { ContenitoreSeduteMedico, ContenitoreSedutePaziente } from "./contenitoreSedute";
+import GrayTable from "../graytable";
+import { ContenitoreSeduteMedico, ContenitoreSedutePaziente } from "./contenitore_sedute";
 
-export default function SeduteWrapper() {
+export default function SeduteWrapper({ userRole }) {
   return (
     <div style={{ position: 'relative', width: '100%', height: '90vh' }}>
       {/* Sfondo grigio */}
@@ -11,7 +11,7 @@ export default function SeduteWrapper() {
       <div
         style={{
           position: 'absolute',
-          top: '16%',
+          top: '20%',       //modifica 20
           left: '4%',
           width: '92%',
           height: '72%',
@@ -20,9 +20,8 @@ export default function SeduteWrapper() {
           zIndex: 10, // Più alto dello sfondo
         }}
       >
-        {/* Esempio di contenuti */}
-        <ContenitoreSeduteMedico />
-        <ContenitoreSedutePaziente />
+        {userRole === 'medico' && <ContenitoreSeduteMedico />}
+        {userRole === 'paziente' && <ContenitoreSedutePaziente />}
       </div>
     </div>
   );

@@ -163,6 +163,7 @@ export async function GetUserRole() {   //NON TOCCARE CHE FUNZIONA!!!!!!!!!!!!!!
     console.error('Errore in GetUserRole:', error.message);
     return null;
   }
+
 }
 
 // ritorna tutti i medici di un paziente
@@ -426,7 +427,6 @@ export async function getEsercizioByName(nome){
 
 
 /*curl -X POST http://localhost:8000/api/inviaMessaggio/ \
-  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzUwMTUzMzEzLCJpYXQiOjE3NTAxNTMwMTMsImp0aSI6IjA1MmI3Y2ZhOGZhZTRiZWNhNjhjOTU3YjJhN2NiZmZlIiwidXNlcl9pZCI6Mn0.bJNm4fYRtLV6SUt58MP0Z_LQ28cUqcQP_qkW6NM585A" \
   -H "Content-Type: application/json" \
   -d '{"codiceFiscale": "FLCGRN89M20H501P", "contenuto": "ciao"}'*/
 export async function inviaMessaggio(codiceFiscale, contenuto){
@@ -448,6 +448,7 @@ export async function inviaMessaggio(codiceFiscale, contenuto){
       if (!response.ok) {
         throw new Error('Errore nella richiesta');
       }
+
       const data = await response.json();
       console.log(data);
     }catch (error) {

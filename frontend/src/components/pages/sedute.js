@@ -1,15 +1,19 @@
-import { ContenitoreSedutePaziente, ContenitoreSeduteMedico } from "../contenitoreSedute";
-import GrayTable from "../graytable";
+import { useEffect, useState } from "react";
 import Navbar from "../navbar";
-import SeduteWrapper from "../seduteWrapper";
+import SeduteWrapper from "../sedute_bag/sedute_wrapper";
+import { GetUserRole } from "../../backend";
 
-export default function SedutePage({setView, view}) {
+export default function SedutePage({ setView, view }) {
+  const [userRole, setUserRole] = useState(null);
+
+  useEffect(() => {
+    GetUserRole().then(role => setUserRole(role));
+  }, []);
+
   return (
     <>
-      <Navbar setView={setView} view={view}/>
-      <SeduteWrapper/>
-      
-      {/* <GrayTable /> se vuoi, puoi aggiungere anche questo */}
+      <Navbar setView={setView} view={view} />
+      <SeduteWrapper userRole={userRole} />
     </>
   );
 }
