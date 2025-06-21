@@ -24,7 +24,7 @@ export default function InfoEsercizio({ esercizio }) {
   }, [esercizio]);
 
   if (errore) {
-    return <div style={{ color: "red" }}>{errore}</div>;
+    return <div style={{ position: 'absolute', color: "red" }}>{errore}</div>;
   }
 
   if (!datiEsercizio) {
@@ -32,7 +32,7 @@ export default function InfoEsercizio({ esercizio }) {
   }
 
   return (
-    <div style={{ position:'absolute',width:'68%',height:'65%',left:'15%',top:'12%', textAlign: "center"}}>
+    <div style={{ position:'absolute',width:'68%',height:'65%',left:'15%',top:'12%', textAlign: "center", border: '1px solid black'}}>
       <h2 style={{position:'relative', top:'5%',fontSize:'140%'}}>{datiEsercizio.nome}</h2>
 
       <div style={{ display: "flex", justifyContent: "center", marginTop: "5%" }}>

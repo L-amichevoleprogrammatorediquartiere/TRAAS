@@ -1,4 +1,5 @@
 import PopUpBig from "../popup/ppbig";
+import InfoEsercizio from "../esercizi/infoesercizio";
 import OpenButton from "../button/openbutton";
 import { InfoPaziente } from "../../backend"; // Mock dati esercizi
 import { useState } from "react";
@@ -43,7 +44,6 @@ export default function ContenitoreInfoPaziente({ showPopup, onClosePopup, sedut
           width: "60%",
           height: "76%",
           overflowY: "auto",
-          zIndex: 1060,
           backgroundColor: "transparent",
         }}
       >
@@ -60,42 +60,7 @@ export default function ContenitoreInfoPaziente({ showPopup, onClosePopup, sedut
         </div>
 
         {/* Selezionato: Mostra video e descrizione */}
-        {esercizioSelezionato ? (
-          <div
-            style={{
-              margin: "1cm 4cm",
-              border: "2px solid #555",
-              borderRadius: "6px",
-              padding: "20px",
-              backgroundColor: "#eee",
-              display: "flex",
-              gap: "20px",
-            }}
-          >
-            <div style={{ flex: 2 }}>
-              <iframe
-                width="100%"
-                height="315"
-                src="https://www.youtube.com/embed/dQw4w9WgXcQ" // Video mockato
-                title="Esercizio Video"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              ></iframe>
-            </div>
-
-            <div style={{ flex: 1 }}>
-              <h5>Descrizione esercizio</h5>
-              <p>{esercizioSelezionato.descrizione || "Questa è una descrizione mockata dell'esercizio."}</p>
-
-              <button
-                className="btn btn-secondary mt-3"
-                onClick={() => setEsercizioSelezionato(null)}
-              >
-                Torna alla lista
-              </button>
-            </div>
-          </div>
-        ) : (
+        {!esercizioSelezionato && 
           // Nessun esercizio selezionato: mostra lista
           esercizi.map((esercizio) => (
             <div
@@ -111,12 +76,17 @@ export default function ContenitoreInfoPaziente({ showPopup, onClosePopup, sedut
             >
               <EsercizioDaFare
                 testo={esercizio.testo}
-                bottone={<OpenButton onClick={() => setEsercizioSelezionato(esercizio)} />}
+                bottone={<OpenButton onClick={() => setEsercizioSelezionato(esercizio.testo)} />}
               />
             </div>
           ))
-        )}
+        }
       </div>
+      {esercizioSelezionato && 
+        <>
+          <PopUpBig onClick={()=> setEsercizioSelezionato(null)} onInnerClick={()=> setEsercizioSelezionato(null)}/>
+          <InfoEsercizio esercizio={esercizioSelezionato} />
+        </>}
     </>
   );
 }

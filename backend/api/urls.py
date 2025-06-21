@@ -25,7 +25,9 @@ from .views import (
     delete_esercizio,
     create_esercizio,
     fetch_pazienti_associati,
-    aggiungi_seduta
+    aggiungi_seduta,
+    seduta_paziente,
+    seduta_medico
 )
 
 # Router DRF per i ViewSet
@@ -59,4 +61,6 @@ urlpatterns = [
     path('createEsercizio/', create_esercizio, name='createEsercizio'),
     path('fetchPazientiAssociati/', fetch_pazienti_associati, name='fetchPazientiAssociati'),
     path('aggiungiSeduta/', aggiungi_seduta, name='aggiungiSeduta'),
+    path('sedutaPaziente/', seduta_paziente, name='sedutaPaziente'),
+    path('sedutaMedico/', seduta_medico, name='sedutaMedico'),
 ]

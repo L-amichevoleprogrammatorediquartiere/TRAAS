@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SedutaMedico, SedutaPaziente } from "../../backend";
 import InfoButton from "../button/infobutton";
 import PlayButton from "../button/playbutton";
@@ -54,7 +54,18 @@ function ContenitoreSedutePaziente() {
   const [paginaEsercizio, setPaginaEsercizio] = useState(false);
   const [sedutaSelezionata, setSedutaSelezionata] = useState(null);
 
-  const sedute = SedutaPaziente();
+  //!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  const [sedute, setSedute]= useState([]);
+
+  useEffect(()=>{
+    const fetchSedute = async () => {
+      const sedute = await SedutaPaziente();
+      console.log(sedute);
+      setSedute(sedute);
+    };
+
+    fetchSedute();
+  },[]);
 
   const handleOpenPopup = (seduta) => {
     setSedutaSelezionata(seduta);
@@ -82,49 +93,51 @@ function ContenitoreSedutePaziente() {
 
   return (
     <>
-      {sedute.map((seduta) => {
-        const isDataMockata = seduta.data === dataMockata;
-        const testo = `Seduta del ${seduta.data}`;
+      <div style={{position:'absolute', top:'21%', left:'5%', height:'69%', width:'89%', border:'1px solid black'}}>
+        {sedute.map((seduta) => {
+          const isDataMockata = seduta.data === dataMockata;
+          const testo = `Seduta del ${seduta.data}`;
 
-        return (
-          <div
-            key={seduta.id}
-            style={{
-              margin: "1cm 4cm",
-              border: "2px solid #555",
-              borderRadius: "6px",
-              padding: "10px 20px",
-              backgroundColor: "#eee",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <ComponenteSedutePaziente
-              testo={testo}
-              valutazione={isDataMockata ? "" : seduta.valutazione}
-              bottone={
-                isDataMockata ? (
-                  <div style={{ display: "flex", alignItems: "center" }}>
-                    <InfoButton onClick={() => handleOpenPopup(seduta)} />
-                    <div
-                      style={{
-                        width: "1px",
-                        height: "24px",
-                        backgroundColor: "#ccc",
-                        margin: "0 8px"
-                      }}
-                    />
-                    <PlayButton onClick={() => handlePlayClick(seduta)} />
-                  </div>
-                ) : (
-                  <InfoButton onClick={() => handleOpenPopup(seduta)} />
-                )
-              }
-            />
-          </div>
-        );
-      })}
+          return (
+              <div
+                key={seduta.id}
+                style={{
+                  margin: "1cm 4cm",
+                  border: "2px solid #555",
+                  borderRadius: "6px",
+                  padding: "10px 20px",
+                  backgroundColor: "#eee",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <ComponenteSedutePaziente
+                  testo={testo}
+                  valutazione={isDataMockata ? "" : seduta.valutazione}
+                  bottone={
+                    isDataMockata ? (
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        <InfoButton onClick={() => handleOpenPopup(seduta)} />
+                        <div
+                          style={{
+                            width: "1px",
+                            height: "24px",
+                            backgroundColor: "#ccc",
+                            margin: "0 8px"
+                          }}
+                        />
+                        <PlayButton onClick={() => handlePlayClick(seduta)} />
+                      </div>
+                    ) : (
+                      <InfoButton onClick={() => handleOpenPopup(seduta)} />
+                    )
+                  }
+                />
+              </div>
+          );
+        })}
+      </div>
 
       <ContenitoreInfoPaziente
         showPopup={showInfo}
@@ -137,7 +150,18 @@ function ContenitoreSedutePaziente() {
 
 // Contenitore medico
 function ContenitoreSeduteMedico() {
-  const sedute = SedutaMedico();
+  //!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  const [sedute, setSedute]= useState([]);
+
+  useEffect(()=>{
+    const fetchSedute = async () => {
+      const sedute = await SedutaMedico();
+      console.log(sedute);
+      setSedute(sedute);
+    };
+
+    fetchSedute();
+  },[]);
 
   const handleClick = () => alert("Hai cliccato il pulsante!");
 

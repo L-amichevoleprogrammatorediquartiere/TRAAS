@@ -12,8 +12,8 @@ export default function SedutePage({ setView, view }) {
 
   return (
     <>
-      <SeduteWrapper userRole={userRole} />
       <Navbar setView={setView} view={view} />
+      <SeduteWrapper userRole={userRole} />
     </>
   );
 }
