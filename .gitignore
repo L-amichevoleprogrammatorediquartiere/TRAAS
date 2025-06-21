@@ -23,6 +23,7 @@ info
 
 # Ignora esplicitamente questa cartella
 backend/venv_win/
+backend/venv/
 
 # Cache di Python
 __pycache__/
