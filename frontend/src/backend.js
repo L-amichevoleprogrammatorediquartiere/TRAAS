@@ -639,61 +639,60 @@ export async function aggiungiSeduta(codiceFiscale, data, tipo, esercizi) {
 
 //PEPPE FUNZIONI SUE QUA SOTTO DA PASSARE A VERE
 
-export function SedutaPaziente() {
-  const sedutePazienteMock = [
-    { id: 1, data: "2024-01-01", valutazione: "valutazione: bassa" },
-    { id: 2, data: "2024-01-15", valutazione: "valutazione: media" },
-    { id: 3, data: "2024-01-29", valutazione: "valutazione: alta" },
-  ];
+//ritorna le sedute di un paziente
+export async function SedutaPaziente() {
+  try {
+    const token = await checkAndRefreshToken();
 
-  return sedutePazienteMock;
+    const response = await fetch(`${API_BASE}/sedutaPaziente/`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('Errore nel recupero delle sedute Medico');
+    }
+
+    const data = await response.json();
+    console.log(data);
+    return data;
+  }catch (error) {
+    console.error('Errore in sedutaMedico:', error.message);
+    return null;
+  }
 }
 
-export function SedutaMedico() {
-  const seduteMedicoMock = [
-    {
-      id: 1,
-      data: "2024-01-01",
-      codice_fiscale: "RSSMRA85T10H501Z",
-      valutazione: "valutazione: bassa",
-      tiposeduta: "Sincrona",
-    },
-    {
-      id: 2,
-      data: "2024-01-15",
-      codice_fiscale: "VRDLGI92E15F205S",
-      valutazione: "valutazione: media",
-      tiposeduta: "Sincrona",
-    },
-    {
-      id: 3,
-      data: "2024-01-27",
-      codice_fiscale: "BNCLRA78A01H501D",
-      valutazione: "valutazione: alta",
-      tiposeduta: "Sincrona",
-    },
-    {
-      id: 4,
-      data: "2024-01-28",
-      codice_fiscale: "BNCLRA78A01H501D",
-      valutazione: "valutazione: alta",
-      tiposeduta: "Asincrona",
-    },
-    {
-      id: 5,
-      data: "2024-01-29",
-      codice_fiscale: "BNCLRA78A01H501D",
-      valutazione: "valutazione: alta",
-      tiposeduta: "Asincrona",
-    },
-  ];
+//ritorna le sedute di un medico (abbiamo gia fetchVisite per fare ciò)
+export async function SedutaMedico() {
+  try {
+    const token = await checkAndRefreshToken();
 
-  return seduteMedicoMock;
+    const response = await fetch(`${API_BASE}/sedutaMedico/`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('Errore nel recupero delle sedute Medico');
+    }
+
+    const data = await response.json();
+    console.log(data);
+    return data;
+  }catch (error) {
+    console.error('Errore in sedutaMedico:', error.message);
+    return null;
+  }
 }
 
-export function InfoPaziente() {
+//dobbiamo passargli il codice seduta
+export function InfoPaziente(codiceSeduta) {
   return [
-    { id: 1, testo: "Respirazione Diaframmatica", descrizione: "Descrizione mock esercizio 1" },
+    { id: 1, testo: "Prova", descrizione: "Descrizione mock esercizio 1" },
     { id: 2, testo: "Rilassamento Muscolare Progressivo", descrizione: "Descrizione mock esercizio 2" },
     { id: 3, testo: "Esercizio di Visualizzazione", descrizione: "Descrizione mock esercizio 3" },
     { id: 4, testo: "Respirazione Diaframmatica", descrizione: "Descrizione mock esercizio 1" },
