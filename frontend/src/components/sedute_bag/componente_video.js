@@ -3,7 +3,7 @@ export default function VideoSection({ fase }) {
     <div
       style={{
         display: "flex",
-        gap: "7.5px", // spazio ridotto tra i video (~0.2cm)
+        gap: "7.5px", // spazio ridotto tra i video (0.2)
         flex: "1 1 auto",
         minHeight: 0,
         maxHeight: "50%",
