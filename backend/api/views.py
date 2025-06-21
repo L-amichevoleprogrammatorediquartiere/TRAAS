@@ -604,3 +604,63 @@ def aggiungi_seduta(request):
             return Response({'error': f'Esercizio non trovato: {nome_esercizio}'}, status=status.HTTP_404_NOT_FOUND)
 
     return Response({'success': True, 'codice_seduta': codice_seduta}, status=status.HTTP_201_CREATED)
+
+
+#Viste per Peppe
+
+#sedutaPaziente     id: 1, data: "2024-01-01", valutazione: "valutazione: bassa"
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def seduta_paziente(request):
+    user = request.user
+
+    # Ottieni il paziente collegato all'user
+    try:
+        paziente = Paziente.objects.get(user=user)
+    except Paziente.DoesNotExist:
+        return Response({'error': 'Utente non è un paziente'}, status=status.HTTP_403_FORBIDDEN)
+
+    sedute = Seduta.objects.filter(paziente=paziente).order_by('data')
+
+    result = []
+    for seduta in sedute:
+        result.append({
+            'id': seduta.codice,
+            'data': seduta.data.strftime("%Y-%m-%d"),
+            'valutazione': seduta.evaluate_pt if seduta.evaluate_pt else "N.D.",
+            'tiposeduta': seduta.tipo if seduta.tipo else "N.D."
+        })
+
+    return Response(result, status=status.HTTP_200_OK)
+
+
+#sedutaMedco    id: 1, data: "2024-01-01", codice_fiscale: "RSSMRA85T10H501Z", valutazione: "valutazione: bassa", tiposeduta: "Sincrona",
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def seduta_medico(request):
+    user = request.user
+
+    # Ottieni il medico collegato all'user
+    try:
+        medico = Medico.objects.get(user=user)
+    except Medico.DoesNotExist:
+        return Response({'error': 'Utente non è un medico'}, status=status.HTTP_403_FORBIDDEN)
+
+    sedute = Seduta.objects.filter(medico=medico).order_by('data')
+
+    result = []
+    for seduta in sedute:
+        result.append({
+            'id': seduta.codice,
+            'data': seduta.data.strftime("%Y-%m-%d"),
+            'codice_fiscale': seduta.paziente.codice_fiscale,
+            'valutazione': seduta.evaluate_pt if seduta.evaluate_pt else "N.D.",
+            'tiposeduta': seduta.tipo if seduta.tipo else "N.D."
+        })
+
+    return Response(result, status=status.HTTP_200_OK)
+
+#infoPaziente   { id: 1, testo: "Respirazione Diaframmatica", descrizione: "Descrizione mock esercizio 1" },
+#@api_view(['GET'])
+#@permission_classes([IsAuthenticated])
+#def info_paziente(request):

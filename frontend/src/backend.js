@@ -633,6 +633,7 @@ export async function aggiungiSeduta(codiceFiscale, data, tipo, esercizi) {
   }
 }
 
+<<<<<<< HEAD
 export function SedutaPaziente() {
   const sedutePazienteMock = [
     { id: 1, data: "2024-01-01", valutazione: "valutazione: bassa" },
@@ -690,5 +691,75 @@ export function InfoPaziente() {
     { id: 1, testo: "Respirazione Diaframmatica", descrizione: "Descrizione mock esercizio 1" },
     { id: 2, testo: "Rilassamento Muscolare Progressivo", descrizione: "Descrizione mock esercizio 2" },
     { id: 3, testo: "Esercizio di Visualizzazione", descrizione: "Descrizione mock esercizio 3" },
+=======
+
+
+
+
+//PEPPE FUNZIONI SUE QUA SOTTO DA PASSARE A VERE
+
+//ritorna le sedute di un paziente
+export async function SedutaPaziente() {
+  try {
+    const token = await checkAndRefreshToken();
+
+    const response = await fetch(`${API_BASE}/sedutaPaziente/`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('Errore nel recupero delle sedute Medico');
+    }
+
+    const data = await response.json();
+    console.log(data);
+    return data;
+  }catch (error) {
+    console.error('Errore in sedutaMedico:', error.message);
+    return null;
+  }
+}
+
+//ritorna le sedute di un medico (abbiamo gia fetchVisite per fare ciò)
+export async function SedutaMedico() {
+  try {
+    const token = await checkAndRefreshToken();
+
+    const response = await fetch(`${API_BASE}/sedutaMedico/`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('Errore nel recupero delle sedute Medico');
+    }
+
+    const data = await response.json();
+    console.log(data);
+    return data;
+  }catch (error) {
+    console.error('Errore in sedutaMedico:', error.message);
+    return null;
+  }
+}
+
+//dobbiamo passargli il codice seduta
+export function InfoPaziente(codiceSeduta) {
+  return [
+    { id: 1, testo: "Prova", descrizione: "Descrizione mock esercizio 1" },
+    { id: 2, testo: "Rilassamento Muscolare Progressivo", descrizione: "Descrizione mock esercizio 2" },
+    { id: 3, testo: "Esercizio di Visualizzazione", descrizione: "Descrizione mock esercizio 3" },
+    { id: 4, testo: "Respirazione Diaframmatica", descrizione: "Descrizione mock esercizio 1" },
+    { id: 5, testo: "Rilassamento Muscolare Progressivo", descrizione: "Descrizione mock esercizio 2" },
+    { id: 6, testo: "Esercizio di Visualizzazione", descrizione: "Descrizione mock esercizio 3" },
+    { id: 7, testo: "Respirazione Diaframmatica", descrizione: "Descrizione mock esercizio 1" },
+    { id: 8, testo: "Rilassamento Muscolare Progressivo", descrizione: "Descrizione mock esercizio 2" },
+    { id: 9, testo: "Esercizio di Visualizzazione", descrizione: "Descrizione mock esercizio 3" },
+>>>>>>> main
   ];
 }

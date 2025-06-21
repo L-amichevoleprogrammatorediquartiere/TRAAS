@@ -34,6 +34,7 @@ class Esercizio(models.Model):
     categoria = models.CharField(max_length=50)
     video = models.CharField(max_length=255)
     descrizione = models.TextField()
+    criterio = models.CharField(max_length=100, blank=True, null=True)
 
 
 # Seduta
