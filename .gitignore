@@ -16,3 +16,10 @@ log/
 
 info
 .vscode/extensions.json
+
+
+# Ignora qualsiasi cartella che inizia con "venv" ovunque nel progetto
+**/venv*/
+
+# Ignora esplicitamente questa cartella
+backend/venv_win/
